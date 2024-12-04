@@ -13,7 +13,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      signUpForceRedirectUrl="/dashboard"
+      signInForceRedirectUrl="/dashboard"
+    >
       <html lang="en">
         <body>{children}</body>
       </html>
