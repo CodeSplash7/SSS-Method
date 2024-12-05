@@ -29,6 +29,13 @@ export default async function HomePage() {
   );
 }
 
+/**
+ * A motto component
+ * - white text, 24px font, roboto
+ *
+ * @param {{ msg: string }} message motto message
+ * @returns {*}
+ */
 function Motto({ msg }: { msg: string }) {
   return (
     <div
@@ -39,6 +46,14 @@ function Motto({ msg }: { msg: string }) {
   );
 }
 
+/**
+ * Redirects to:
+ *  - the dashboard
+ *  / or
+ *  - authentication page
+ *
+ * @returns {*}
+ */
 function StartButton() {
   return (
     <SignUpButton>
