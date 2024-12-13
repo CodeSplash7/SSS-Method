@@ -1,7 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  swcMinify: true,
+  images: {
+    disableStaticImages: true
+  },
+  compilerOptions: {
+    skipLibCheck: true
+  }
 };
 
 export default nextConfig;

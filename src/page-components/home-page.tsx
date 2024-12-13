@@ -2,12 +2,14 @@ import Br from "@/components/LineBreak";
 import Logo from "@/components/Logo";
 import Navbar from "@/components/Navbar";
 import Parallax from "@/components/Parallax";
+import StartButton from "@/components/StartButton";
 import { font_roboto_500 } from "@/general-utils/fonts";
-import { SignUpButton } from "@clerk/nextjs";
+import Link from "next/link";
+import PageEnterAnimation from "@/components/PageEnterAnimation"
 
 export default async function HomePage() {
   return (
-    <div className="w-full h-fit">
+    <div className="relative w-full h-fit home">
       <Navbar />
 
       <Parallax imagePath="/calisthenics-image.png">
@@ -54,14 +56,26 @@ function Motto({ msg }: { msg: string }) {
  *
  * @returns {*}
  */
-function StartButton() {
-  return (
-    <SignUpButton>
-      <div
-        className={`sm:text-[1rem] text-[2rem] flex justify-center px-[30px] w-full sm:w-fit py-[20px] sm:py-[12.5px] border-0 rounded-full bg-[#1cbac8] text-white font-bold transition-all duration-200 hover:bg-[#ffbe5c] hover:shadow-[0_0_100px_#ffbe5c75] hover:scale-110 active:bg-[#1cbac8] active:duration-250 active:shadow-none active:scale-95`}
-      >
-        START 🗿
-      </div>
-    </SignUpButton>
-  );
-}
+// function StartButton() {
+//   return (
+//     <>
+//       <SignedOut>
+//         <SignUpButton>
+//           <div
+//             className={`sm:text-[1rem] text-[2rem] flex justify-center px-[30px] w-full sm:w-fit py-[20px] sm:py-[12.5px] border-0 rounded-full bg-[#1cbac8] text-white font-bold transition-all duration-200 hover:bg-[#ffbe5c] hover:shadow-[0_0_100px_#ffbe5c75] hover:scale-110 active:bg-[#1cbac8] active:duration-250 active:shadow-none active:scale-95`}
+//           >
+//             START 🗿
+//           </div>
+//         </SignUpButton>
+//       </SignedOut>
+//       <SignedIn>
+//         <Link
+//           href="/dashboard"
+//           className={`sm:text-[1rem] text-[2rem] flex justify-center px-[30px] w-full sm:w-fit py-[20px] sm:py-[12.5px] border-0 rounded-full bg-[#1cbac8] text-white font-bold transition-all duration-200 hover:bg-[#ffbe5c] hover:shadow-[0_0_100px_#ffbe5c75] hover:scale-110 active:bg-[#1cbac8] active:duration-250 active:shadow-none active:scale-95`}
+//         >
+//           START 🗿
+//         </Link>
+//       </SignedIn>
+//     </>
+//   );
+// }
