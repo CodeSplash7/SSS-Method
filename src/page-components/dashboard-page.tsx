@@ -1,10 +1,11 @@
+import ProgressionStep from "@/components/ProgressionStep";
 import { connectToDatabase } from "@/lib/mongodb";
 import User from "@/models/user/index";
+import { User as CustomUserType, UserAnalysis } from "@/types/UserTypes";
 import { StrengthProfile } from "@/types/UserTypes";
 import type { User as UserType } from "@clerk/backend";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { Suspense } from "react";
 
 /**
  * Page component
@@ -19,32 +20,11 @@ export default async function DashboardPage() {
   if (!user) redirect("/");
 
   const loggedUser = await ensureUserExists(user, () => createUser(user));
-  const hasPerformanceData = loggedUser?.getPerformanceLevel("peak").overall;
+  const hasPerformanceData = loggedUser?.getPowerLevels("peak").overall;
+  console.log(hasPerformanceData);
 
-  if (!hasPerformanceData)
-    return (
-      <div className="z-30 w-screen h-screen bg-[#1cbac875] flex justify-center items-center">
-        <div className="w-[600px] scale-75 bg-white flex flex-col p-[48px] justify-start items-center gap-[32px] rounded-[14px]">
-          <div className="bg-red-500 text-white font-bold text-[20px] text-center rounded-full px-[32px] py-[12px]">
-            ONE MORE STEP!
-          </div>
-          <div className="flex flex-col text-[#6741d9] text-[40px] items-center">
-            <div>Progression Level From</div>
-            <div className="font-bold">REQUIRED</div>
-          </div>
-          <div className="w-2/3 text-center text-[18px]">
-            How can I give you the best training plan without knowing your
-            level?
-          </div>
-          <br />
-          <div className="bg-[#1cbac8] text-white px-[48px] py-[24px] text-[30px] font-bold">
-            FILL FORM 🗿
-          </div>
-        </div>
-      </div>
-    );
-
-  return <div>BEAST</div>;
+  if (!hasPerformanceData) return <ProgressionStep />;
+  return <div>DASHBOARD</div>;
 }
 
 /**
@@ -74,16 +54,20 @@ const ensureUserExists = async (user: UserType, callback?: () => void) => {
  * Adds new user to the mongodb database
  *
  * @async
- * @param {*} user - User instance from clerk's types
- * @returns {void}
+ * @param {UserType} user - User instance from clerk's types
+ * @returns {Promise<void>}
  */
-const createUser = async (user: UserType) => {
+const createUser = async (user: UserType): Promise<void> => {
   const newUser = new User({
     clerkId: user.id,
     name: user.fullName,
     email: user.emailAddresses[0].emailAddress,
     strengthProfile: defaultStrengthProfile,
-  });
+    age: defaultAge,
+    analysis: defaultAnalysis,
+    liftHistory: [],
+    trainingSchedule: null,
+  } as CustomUserType);
 
   await newUser.save();
 };
@@ -97,12 +81,20 @@ const createUser = async (user: UserType) => {
 const defaultStrengthProfile: StrengthProfile = [
   {
     name: "Pullups",
-    peakPerformance: { reps: 0, weight: 0 },
-    currentPerformance: { reps: 0, weight: 0 },
+    peakLiftId: null,
+    currentLiftId: null,
   },
   {
     name: "Dips",
-    peakPerformance: { reps: 0, weight: 0 },
-    currentPerformance: { reps: 0, weight: 0 },
+    peakLiftId: null,
+    currentLiftId: null,
   },
 ];
+
+const defaultAge = null;
+
+const defaultAnalysis: UserAnalysis = {
+  averageExpectationResults: null,
+  averageFatigue: null,
+  averageProgressionRate: null,
+};
