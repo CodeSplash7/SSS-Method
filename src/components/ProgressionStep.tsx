@@ -1,4 +1,4 @@
-import CardToFormButton from "@/general-utils/CardToFromButton";
+import CardToFormButton from "@/components/CardToFormButton";
 
 const ProgressionStep = () => {
   return (

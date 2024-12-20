@@ -1,9 +1,9 @@
 "use client";
 
 import { animate } from "@/general-utils/app-routes";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
-const ScaleDownFormAnimation = ({ formId }: { formId: string }) => {
+const ScaleDownFormAnimation = () => {
     useEffect(() => {
         const animateScaleDown = async () => {
             animate("#progress-bar", {
@@ -30,17 +30,23 @@ const ScaleDownFormAnimation = ({ formId }: { formId: string }) => {
             animate("#options", {
                 duration: 0.5,
                 easeFunc: "ease",
-                fromStyles: { fontSize: "0.9rem" }, // Reduced margin and font size
-                toStyles: { fontSize: "0.675rem" }, // Adjusted font size for consistency
+                fromStyles: { fontSize: "0.9rem", marginTop: "40px" }, // Reduced margin and font size
+                toStyles: { fontSize: "0.675rem", marginTop: "0px" }, // Adjusted font size for consistency
             });
         };
-        const formElement = document.getElementById(formId);
-        if (!formElement) return;
 
-        formElement.addEventListener("click", animateScaleDown);
+        const options = document.getElementById("options");
+        if (!options) return;
 
-        return () => formElement.removeEventListener("click", animateScaleDown);
-    }, [formId]);
+        const handleScroll = () => {
+            animateScaleDown();
+            options.removeEventListener("scroll", handleScroll);
+        };
+
+        options.addEventListener("scroll", handleScroll);
+
+        return () => options.removeEventListener("scroll", handleScroll);
+    }, []);
     return <></>;
 };
 export default ScaleDownFormAnimation;
