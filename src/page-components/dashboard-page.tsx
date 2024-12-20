@@ -91,7 +91,7 @@ const defaultStrengthProfile: StrengthProfile = [
   },
 ];
 
-const defaultAge = null;
+const defaultAge = 1;
 
 const defaultAnalysis: UserAnalysis = {
   averageExpectationResults: null,

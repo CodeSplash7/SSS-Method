@@ -5,7 +5,6 @@ import Parallax from "@/components/Parallax";
 import StartButton from "@/components/StartButton";
 import { font_roboto_500 } from "@/general-utils/fonts";
 import Link from "next/link";
-import PageEnterAnimation from "@/components/PageEnterAnimation"
 
 export default async function HomePage() {
   return (
