@@ -3,24 +3,17 @@
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { HomeRoute, routes } from "@/general-utils/app-routes";
+import usePath from "@/hooks/usePath";
 
 export default function PageEnterAnimation() {
-  const pathname = usePathname();
-  const cookies = document.cookie
-    .split("; ")
-    .reduce<Record<string, string>>((acc, cookie) => {
-      const [key, value] = cookie.split("=");
-      acc[key] = value;
-      return acc;
-    }, {});
-  const previousPath = cookies["previousPath"];
+  const { currentPath, isSamePath } = usePath();
 
   useEffect(() => {
-    if (previousPath === pathname) return;
-    document.cookie = `previousPath=${pathname}`;
+    if (isSamePath) return;
+    document.cookie = `previousPath=${currentPath}`;
 
-    routes[pathname as "/"].doEnterAnimation();
-  }, [pathname]);
+    routes[currentPath as "/"].doEnterAnimation();
+  }, [currentPath]);
 
   return (
     <>

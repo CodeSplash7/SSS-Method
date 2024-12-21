@@ -1,10 +1,20 @@
+import QuestionnaireOptions from "@/components/QuestionnaireOptions";
 import ScaleDownFormAnimation from "@/components/ScaleDownFormAnimation";
+import parseUrl from "@/general-utils/parse-url";
+import { Question } from "@/types/QuestionnaireTypes";
+import { cookies, headers } from "next/headers";
 
-export default function PowerLevelFormPage({
+export default async function PowerLevelFormPage({
     searchParams,
+    params,
 }: {
+    params: Record<symbol, any>;
     searchParams: { questionIndex: string };
 }) {
+    const currentRoute = params[Object.getOwnPropertySymbols(params)[7]].route;
+    const isSameRoute =
+        currentRoute === (await cookies()).get("previousPath")?.value;
+
     return (
         <div className="z-30 w-full h-screen flex flex-col justify-start items-center">
             <ScaleDownFormAnimation />
@@ -29,8 +39,9 @@ export default function PowerLevelFormPage({
                         className="w-full h-[12px] bg-[#e7e5e5] rounded-[3px] text-[7.5px]"
                     >
                         <div
+                            id="progress-fill"
                             style={{
-                                width: `${(Number(searchParams.questionIndex) + 1) * 33.3333}%`,
+                                width: `${(Number(searchParams.questionIndex) + 1) * 33.3333 * Number(isSameRoute)}%`,
                             }}
                             className="min-h-[3px] h-full bg-[#d30c7b] flex items-center justify-center text-white font-bold"
                         >
@@ -38,6 +49,7 @@ export default function PowerLevelFormPage({
                         </div>
                     </div>
                     <QuestionPrompt
+                        isSameRoute={isSameRoute}
                         questionIndex={Number(searchParams.questionIndex)}
                     />
                 </div>
@@ -46,13 +58,13 @@ export default function PowerLevelFormPage({
     );
 }
 
-type QuestionOption = { answer: string; detail: string; emoji: string };
-type Question = {
-    statement: string;
-    options: QuestionOption[];
-};
-
-function QuestionPrompt({ questionIndex }: { questionIndex: number }) {
+function QuestionPrompt({
+    questionIndex,
+    isSameRoute,
+}: {
+    questionIndex: number;
+    isSameRoute: boolean;
+}) {
     const Questionnaire: Question[] = [
         {
             statement: "What is your level at pullups?",
@@ -109,29 +121,12 @@ function QuestionPrompt({ questionIndex }: { questionIndex: number }) {
                 style={{
                     fontSize: `22.5px`,
                     marginTop: `12px`,
+                    opacity: `${Number(isSameRoute)}`,
                 }}
             >
                 {statement}
             </div>
-            <div
-                id="options"
-                className="flex flex-col justify-start gap-[9px] h-fit w-full text-[0.9rem] mt-[40px] overflow-y-scroll"
-            >
-                {options.map((option, index) => (
-                    <div
-                        key={index}
-                        className="option bg-[#e9ecef] rounded-[6px] h-fit flex justify-between items-center px-[9px] py-[12px]"
-                    >
-                        <div className="flex text-[#062f33] gap-[3px]">
-                            <div>{option.emoji}</div>
-                            <div>{option.answer}</div>
-                        </div>
-
-                        <div className="text-[#6b6868]">{option.detail}</div>
-                    </div>
-                ))}
-                <br />
-            </div>
+            <QuestionnaireOptions options={options} isSameRoute={isSameRoute} />
         </>
     );
 }

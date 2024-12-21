@@ -114,7 +114,7 @@ export default function CardToFormButton() {
         <div
             onClick={async () => {
                 await transformBgBlock();
-                router.push("power-level-form?questionIndex=0");
+                router.push("power-level-form?questionIndex=0&anwers=null");
             }}
             id="button-to-form"
             className="absolute z-[10] bottom-[36px] bg-[#1cbac8] w-[262.5px] h-[60px] flex items-center justify-center rounded-[15px] text-white text-[22.5px] font-bold"
