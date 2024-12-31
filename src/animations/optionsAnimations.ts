@@ -107,7 +107,7 @@ export const handleDeselectAnimation = async (optionIndex: number) => {
 };
 export const handlePartialDeselectAnimation = async (optionIndex: number) => {
     animate(`#option${optionIndex}`, {
-        duration: 0.3,
+        duration: 0.1,
         easeFunc: "ease",
         fromStyles: {
             background: "#1cbac8",
@@ -123,7 +123,7 @@ export const handlePartialDeselectAnimation = async (optionIndex: number) => {
 };
 export const handlePartialSelectAnimation = async (optionIndex: number) => {
     animate(`#option${optionIndex}`, {
-        duration: 0.3,
+        duration: 0.1,
         easeFunc: "ease",
         fromStyles: {
             background: "#e9ecef",
