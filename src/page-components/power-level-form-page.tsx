@@ -1,5 +1,5 @@
 import QuestionnaireOptions from "@/components/QuestionnaireOptions";
-import ScaleDownFormAnimation from "@/components/ScaleDownFormAnimation";
+import ScaleFormOnScrollAnimationHandler from "@/components/ScaleFormOnScrollAnimationHandler";
 import { Question } from "@/types/QuestionnaireTypes";
 import { cookies } from "next/headers";
 
@@ -16,7 +16,7 @@ export default async function PowerLevelFormPage({
 
     return (
         <div className="z-30 w-full h-screen flex flex-col justify-start items-center">
-            <ScaleDownFormAnimation />
+            <ScaleFormOnScrollAnimationHandler />
             <div
                 className="w-[412.5px] h-[225px] relative top-[10px] bg-[#111111] max-w-[90%] flex flex-col p-[12px] justify-between items-center rounded-[10.5px]"
                 style={{
@@ -30,7 +30,7 @@ export default async function PowerLevelFormPage({
 
                 <div
                     id="form-card"
-                    className="absolute z-[10] top-[75px] bg-white w-[375px] h-[450px] py-[18px] px-[36px] gap-[12px] flex flex-col items-center justify-start rounded-[15px] text-black text-[22.5px] font-bold"
+                    className="absolute overflow-hidden z-[10] top-[75px] bg-white w-[375px] h-[450px] py-[18px] px-[36px] gap-[12px] flex flex-col items-center justify-start rounded-[15px] text-black text-[22.5px] font-bold"
                 >
                     {/* Progress Bar * */}
                     <div
@@ -42,7 +42,7 @@ export default async function PowerLevelFormPage({
                             style={{
                                 width: `${(Number(searchParams.questionIndex) + 1) * 33.3333 * Number(isSameRoute)}%`,
                             }}
-                            className="min-h-[3px] h-full bg-[#d30c7b] flex items-center justify-center text-white font-bold"
+                            className="min-h-[3px] h-full bg-[#d30c7b] duration-[.6s] transition-width ease-in-out flex items-center justify-center text-white font-bold"
                         >
                             {Number(searchParams.questionIndex) + 1}/3
                         </div>
@@ -113,7 +113,10 @@ function QuestionPrompt({
     ];
     const { statement, options } = Questionnaire[questionIndex];
     return (
-        <div className="flex flex-col w-full h-full overflow-hidden items-center justify-start gap-[16px]">
+        <div
+            id="form-content"
+            className="relative translate-x-[0%] flex flex-col w-full h-full overflow-hidden items-center justify-start gap-[16px]"
+        >
             <div
                 id="question"
                 className="text-[#343a40] text-[22.5px] h-fit text-center font-bold mt-[12px]"

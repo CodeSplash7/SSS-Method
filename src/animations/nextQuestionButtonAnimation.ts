@@ -4,8 +4,8 @@ export const showNextQuestionButton = () => {
     animate("#next-button", {
         duration: 0.5,
         easeFunc: "ease",
-        fromStyles: { flexBasis: "0px" },
-        toStyles: { flexBasis: "80px" },
+        fromStyles: { height: "0px" },
+        toStyles: { height: "60px" },
     });
 };
 
@@ -13,7 +13,7 @@ export const hideNextQuestionButton = () => {
     animate("#next-button", {
         duration: 0.5,
         easeFunc: "ease",
-        fromStyles: { flexBasis: "80px" },
-        toStyles: { flexBasis: "0px" },
+        fromStyles: { height: "60px" },
+        toStyles: { height: "0px" },
     });
 };
