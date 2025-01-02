@@ -3,6 +3,54 @@ import ScaleFormOnScrollAnimationHandler from "@/components/ScaleFormOnScrollAni
 import { Question } from "@/types/QuestionnaireTypes";
 import { cookies } from "next/headers";
 
+const Questionnaire: Question[] = [
+    {
+        statement: "What is your level at pullups?",
+        options: [
+            { answer: "Beginner", detail: "0 pullups", emoji: "🔧" },
+            { answer: "Intermediate", detail: "1-15 pullups", emoji: "🔨" },
+            { answer: "Advanced", detail: "15+ pullups", emoji: "⚒️" },
+            {
+                answer: "Master",
+                detail: "(20kg+) x 8 Pullups",
+                emoji: "⚔️",
+            },
+        ],
+    },
+    {
+        statement: "What is your level at dips?",
+        options: [
+            { answer: "Beginner", detail: "0 dips", emoji: "🔧" },
+            {
+                answer: "Intermediate",
+                detail: "1-20m dips",
+                emoji: "🔨",
+            },
+            { answer: "Advanced", detail: "20+ dips", emoji: "⚒️" },
+            {
+                answer: "Master",
+                detail: "(40kg+) x 8 dips",
+                emoji: "⚔️",
+            },
+        ],
+    },
+    {
+        statement: "Choose your program for now",
+        options: [
+            {
+                answer: "4-day cycle",
+                detail: "Most efficient",
+                emoji: "⚡",
+            },
+            {
+                answer: "Weekly",
+                detail: "Most accesible",
+                emoji: "🔑",
+            },
+        ],
+    },
+];
+
 export default async function PowerLevelFormPage({
     searchParams,
     params,
@@ -40,7 +88,7 @@ export default async function PowerLevelFormPage({
                         <div
                             id="progress-fill"
                             style={{
-                                width: `${(Number(searchParams.questionIndex) + 1) * 33.3333 * Number(isSameRoute)}%`,
+                                width: `${(((Number(searchParams.questionIndex) + 1) * 100) / Questionnaire.length) * Number(isSameRoute)}%`,
                             }}
                             className="min-h-[3px] h-full bg-[#d30c7b] duration-[.6s] transition-width ease-in-out flex items-center justify-center text-white font-bold"
                         >
@@ -64,53 +112,6 @@ function QuestionPrompt({
     questionIndex: number;
     isSameRoute: boolean;
 }) {
-    const Questionnaire: Question[] = [
-        {
-            statement: "What is your level at pullups?",
-            options: [
-                { answer: "Beginner", detail: "0 pullups", emoji: "🔧" },
-                { answer: "Intermediate", detail: "1-15 pullups", emoji: "🔨" },
-                { answer: "Advanced", detail: "15+ pullups", emoji: "⚒️" },
-                {
-                    answer: "Master",
-                    detail: "(20kg+) x 8 Pullups",
-                    emoji: "⚔️",
-                },
-            ],
-        },
-        {
-            statement: "What is your level at dips?",
-            options: [
-                { answer: "Beginner", detail: "0 dips", emoji: "🔧" },
-                {
-                    answer: "Intermediate",
-                    detail: "1-20m dips",
-                    emoji: "🔨",
-                },
-                { answer: "Advanced", detail: "20+ dips", emoji: "⚒️" },
-                {
-                    answer: "Master",
-                    detail: "(40kg+) x 8 dips",
-                    emoji: "⚔️",
-                },
-            ],
-        },
-        {
-            statement: "Choose your program for now",
-            options: [
-                {
-                    answer: "4-day cycle",
-                    detail: "Most efficient",
-                    emoji: "⚡",
-                },
-                {
-                    answer: "Weekly",
-                    detail: "Most accesible",
-                    emoji: "🔑",
-                },
-            ],
-        },
-    ];
     const { statement, options } = Questionnaire[questionIndex];
     return (
         <div

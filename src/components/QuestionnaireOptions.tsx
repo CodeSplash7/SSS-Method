@@ -39,7 +39,7 @@ export default function QuestionnaireOptions({
             showNextQuestionButton();
             setIsNextButtonHidden(false);
         }
-        if (selectedOption === null) {
+        if (selectedOption === null && !isNextButtonHidden) {
             hideNextQuestionButton();
             setIsNextButtonHidden(true);
         }
@@ -112,8 +112,13 @@ export default function QuestionnaireOptions({
 
             <div
                 onClick={gotoNextQuestion}
+                id="next-button-space-filler"
+                className=" w-full h-[0px] opacity-0"
+            ></div>
+            <div
+                onClick={gotoNextQuestion}
                 id="next-button"
-                className="hover:bg-white hover:text-[#d30c7b] hover:border-[#d30c7b] transition duration-150 border-[1px] border-white text-[20px] bg-[#d30c7b] w-full h-[0px] overflow-hidden flex items-center justify-center text-white rounded"
+                className="absolute -bottom-[60px] hover:bg-white hover:text-[#d30c7b] hover:border-[#d30c7b] transition duration-150 border-[1px] border-white text-[20px] bg-[#d30c7b] w-full h-[60px] overflow-hidden flex items-center justify-center text-white rounded"
             >
                 Next Question
             </div>
