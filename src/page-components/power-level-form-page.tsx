@@ -1,55 +1,8 @@
+import PreviousQuestionButton from "@/components/PreviousQuestionButton";
 import QuestionnaireOptions from "@/components/QuestionnaireOptions";
 import ScaleFormOnScrollAnimationHandler from "@/components/ScaleFormOnScrollAnimationHandler";
-import { Question } from "@/types/QuestionnaireTypes";
+import Questionnaire from "@/general-utils/Questionnaire";
 import { cookies } from "next/headers";
-
-const Questionnaire: Question[] = [
-    {
-        statement: "What is your level at pullups?",
-        options: [
-            { answer: "Beginner", detail: "0 pullups", emoji: "🔧" },
-            { answer: "Intermediate", detail: "1-15 pullups", emoji: "🔨" },
-            { answer: "Advanced", detail: "15+ pullups", emoji: "⚒️" },
-            {
-                answer: "Master",
-                detail: "(20kg+) x 8 Pullups",
-                emoji: "⚔️",
-            },
-        ],
-    },
-    {
-        statement: "What is your level at dips?",
-        options: [
-            { answer: "Beginner", detail: "0 dips", emoji: "🔧" },
-            {
-                answer: "Intermediate",
-                detail: "1-20m dips",
-                emoji: "🔨",
-            },
-            { answer: "Advanced", detail: "20+ dips", emoji: "⚒️" },
-            {
-                answer: "Master",
-                detail: "(40kg+) x 8 dips",
-                emoji: "⚔️",
-            },
-        ],
-    },
-    {
-        statement: "Choose your program for now",
-        options: [
-            {
-                answer: "4-day cycle",
-                detail: "Most efficient",
-                emoji: "⚡",
-            },
-            {
-                answer: "Weekly",
-                detail: "Most accesible",
-                emoji: "🔑",
-            },
-        ],
-    },
-];
 
 export default async function PowerLevelFormPage({
     searchParams,
@@ -80,26 +33,33 @@ export default async function PowerLevelFormPage({
                     id="form-card"
                     className="absolute overflow-hidden z-[10] top-[75px] bg-white w-[375px] h-[450px] py-[18px] px-[36px] gap-[12px] flex flex-col items-center justify-start rounded-[15px] text-black text-[22.5px] font-bold"
                 >
-                    {/* Progress Bar * */}
-                    <div
-                        id="progress-bar"
-                        className="w-full h-[12px] bg-[#e7e5e5] rounded-[3px] text-[7.5px]"
-                    >
-                        <div
-                            id="progress-fill"
-                            style={{
-                                width: `${(((Number(searchParams.questionIndex) + 1) * 100) / Questionnaire.length) * Number(isSameRoute)}%`,
-                            }}
-                            className="min-h-[3px] h-full bg-[#d30c7b] duration-[.6s] transition-width ease-in-out flex items-center justify-center text-white font-bold"
-                        >
-                            {Number(searchParams.questionIndex) + 1}/3
-                        </div>
-                    </div>
+                    <ProgressBar
+                        questionIndex={Number(searchParams.questionIndex)}
+                    />
                     <QuestionPrompt
                         isSameRoute={isSameRoute}
                         questionIndex={Number(searchParams.questionIndex)}
                     />
                 </div>
+            </div>
+        </div>
+    );
+}
+
+function ProgressBar({ questionIndex }: { questionIndex: number }) {
+    return (
+        <div
+            id="progress-bar"
+            className="w-full h-[12px] bg-[#e7e5e5] rounded-[3px] text-[7.5px]"
+        >
+            <div
+                id="progress-fill"
+                style={{
+                    width: `${((Number(questionIndex) + 1) * 100) / Questionnaire.length}%`,
+                }}
+                className="min-h-[3px] h-full bg-[#d30c7b] duration-[.6s] transition-width ease-in-out flex items-center justify-center text-white font-bold"
+            >
+                {Number(questionIndex) + 1}/3
             </div>
         </div>
     );
@@ -120,16 +80,17 @@ function QuestionPrompt({
         >
             <div
                 id="question"
-                className="text-[#343a40] text-[22.5px] h-fit text-center font-bold mt-[12px]"
+                className="text-[#343a40] text-[22.5px] h-fit flex justify-center gap-[16px] font-bold mt-[12px]"
                 style={{
                     fontSize: `22.5px`,
                     marginTop: `12px`,
                     opacity: `${Number(isSameRoute)}`,
                 }}
             >
+                <PreviousQuestionButton />
                 {statement}
             </div>
-            <QuestionnaireOptions options={options} isSameRoute={isSameRoute} />
+            <QuestionnaireOptions isSameRoute={isSameRoute} />
         </div>
     );
 }
