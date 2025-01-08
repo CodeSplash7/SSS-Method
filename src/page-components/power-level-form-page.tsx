@@ -1,5 +1,6 @@
 import PreviousQuestionButton from "@/components/PreviousQuestionButton";
 import QuestionnaireOptions from "@/components/QuestionnaireOptions";
+import QuestionStatement from "@/components/QuestionStatement";
 import ScaleFormOnScrollAnimationHandler from "@/components/ScaleFormOnScrollAnimationHandler";
 import Questionnaire from "@/general-utils/Questionnaire";
 import { cookies } from "next/headers";
@@ -36,10 +37,7 @@ export default async function PowerLevelFormPage({
                     <ProgressBar
                         questionIndex={Number(searchParams.questionIndex)}
                     />
-                    <QuestionPrompt
-                        isSameRoute={isSameRoute}
-                        questionIndex={Number(searchParams.questionIndex)}
-                    />
+                    <QuestionPrompt isSameRoute={isSameRoute} />
                 </div>
             </div>
         </div>
@@ -52,6 +50,9 @@ function ProgressBar({ questionIndex }: { questionIndex: number }) {
             id="progress-bar"
             className="w-full h-[12px] bg-[#e7e5e5] rounded-[3px] text-[7.5px]"
         >
+            <div className="absolute w-fit h-fit left-[10px] top-[14px]">
+                <PreviousQuestionButton />
+            </div>
             <div
                 id="progress-fill"
                 style={{
@@ -65,14 +66,7 @@ function ProgressBar({ questionIndex }: { questionIndex: number }) {
     );
 }
 
-function QuestionPrompt({
-    questionIndex,
-    isSameRoute,
-}: {
-    questionIndex: number;
-    isSameRoute: boolean;
-}) {
-    const { statement, options } = Questionnaire[questionIndex];
+function QuestionPrompt({ isSameRoute }: { isSameRoute: boolean }) {
     return (
         <div
             id="form-content"
@@ -87,8 +81,8 @@ function QuestionPrompt({
                     opacity: `${Number(isSameRoute)}`,
                 }}
             >
-                <PreviousQuestionButton />
-                {statement}
+                {/*<PreviousQuestionButton />*/}
+                <QuestionStatement />
             </div>
             <QuestionnaireOptions isSameRoute={isSameRoute} />
         </div>

@@ -1,6 +1,6 @@
 import { animate } from "@/general-utils/app-routes";
 
-const scaleDownFormAnimation = async () => {
+const spreadOutFormAnimation = async () => {
     animate("#progress-bar", {
         duration: 0.5,
         easeFunc: "ease",
@@ -29,8 +29,7 @@ const scaleDownFormAnimation = async () => {
         toStyles: { marginTop: "0px" },
     });
 };
-
-const scaleUpFormAnimation = async () => {
+const condenseFormAnimation = async () => {
     animate("#progress-bar", {
         duration: 0.5,
         easeFunc: "ease",
@@ -60,4 +59,4 @@ const scaleUpFormAnimation = async () => {
     });
 };
 
-export { scaleDownFormAnimation, scaleUpFormAnimation };
+export { condenseFormAnimation, spreadOutFormAnimation };
