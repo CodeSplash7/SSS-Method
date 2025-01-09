@@ -10,7 +10,7 @@ async function handleShowAnimation() {
     animate("#previous-question-button", {
         duration: 0.3,
         easeFunc: "ease",
-        fromStyles: { opacity: 0 },
+        fromStyles: {},
         toStyles: { opacity: 1 },
     });
 }
@@ -31,39 +31,63 @@ export default function PreviousQuestionButton() {
     // state
     const [isVisible, setIsVisible] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
-
-    useEffect(() => {
-        if (Number(URL.queryParams.questionIndex)) setIsVisible(true);
-        else setIsVisible(false);
-    }, [URL.toString()]);
+    const [currentOpacity] = useState(Number(URL.queryParams.questionIndex));
 
     useEffect(() => {
         (async () => {
-            if (isAnimating) return;
+            const newQuestionIndex = Number(URL.queryParams.questionIndex);
+            if (newQuestionIndex) setIsVisible(true);
+            else setIsVisible(false);
+
             setIsAnimating(true);
-            if (isVisible) await handleShowAnimation();
+            if (newQuestionIndex) await handleShowAnimation();
             else await handleHideAnimation();
 
             setIsAnimating(false);
         })();
-    }, [isVisible]);
+    }, [URL.toString()]);
+
+    // useEffect(() => {
+    //     (async () => {
+    //         if (isAnimating) return;
+    //         console.log("s");
+    //         if (isVisible) await handleShowAnimation();
+    //         else await handleHideAnimation();
+
+    //         setIsAnimating(false);
+    //     })();
+    // }, [isVisible]);
 
     // NO IDEA what the problame here was but i count on future YOU
 
     function handleClick() {
-        if (!isVisible || isAnimating) return;
-        const newURL = { ...URL };
-        newURL.queryParams.questionIndex = String(
-            Number(newURL.queryParams.questionIndex) - 1,
-        );
-        setURL(newURL);
+        (async () => {
+            const newURL = { ...URL };
+            if (!isVisible || isAnimating) return;
+
+            // const newQuestionIndex =
+            //     Number(newURL.queryParams.questionIndex) - 1;
+            // setIsVisible(!!newQuestionIndex);
+
+            // setIsAnimating(true);
+            // if (newQuestionIndex) handleHideAnimation();
+            // else handleShowAnimation();
+
+            // setIsAnimating(false);
+
+            newURL.queryParams.questionIndex = String(
+                Number(newURL.queryParams.questionIndex) - 1,
+            );
+            setURL(newURL);
+        })();
     }
 
     return (
         <div
+            style={{ opacity: currentOpacity }}
             id="previous-question-button"
             onClick={handleClick}
-            className="opacity-0 w-[1px] w-[20px] flex items-center justify-center h-[20px] bg-black rounded-[40%]"
+            className="w-[1px] w-[20px] flex items-center justify-center h-[20px] bg-black rounded-[40%]"
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
