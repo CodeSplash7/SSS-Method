@@ -1,10 +1,10 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { animate } from "@/general-utils/app-routes";
+import useUrl from "@/hooks/useUrl";
 
 export default function CardToFormButton() {
-    const router = useRouter();
+    const [URL, setURL] = useUrl();
     const transformBgBlock = async () => {
         const previousBgElement = document.getElementById(
             "previous-bg-element",
@@ -114,7 +114,12 @@ export default function CardToFormButton() {
         <div
             onClick={async () => {
                 await transformBgBlock();
-                router.push("power-level-form?questionIndex=0&anwers=null");
+                const newURL = {
+                    ...URL,
+                    route: "power-level-form",
+                    queryParams: { questionIndex: "0", answers: "" },
+                };
+                setURL(newURL);
             }}
             id="button-to-form"
             className="absolute z-[10] bottom-[36px] bg-[#1cbac8] w-[262.5px] h-[60px] flex items-center justify-center rounded-[15px] text-white text-[22.5px] font-bold"

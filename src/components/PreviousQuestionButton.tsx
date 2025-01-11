@@ -31,7 +31,9 @@ export default function PreviousQuestionButton() {
     // state
     const [isVisible, setIsVisible] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
-    const [currentOpacity] = useState(Number(URL.queryParams.questionIndex));
+    const [currentOpacity] = useState(
+        Number(URL.queryParams.questionIndex || 0),
+    );
 
     useEffect(() => {
         (async () => {

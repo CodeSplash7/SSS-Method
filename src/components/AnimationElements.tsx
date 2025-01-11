@@ -1,8 +1,7 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import { useEffect } from "react";
-import { HomeRoute, routes } from "@/general-utils/app-routes";
+import { routes } from "@/general-utils/app-routes";
 import usePath from "@/hooks/usePath";
 
 export default function PageEnterAnimation() {
@@ -11,6 +10,9 @@ export default function PageEnterAnimation() {
   useEffect(() => {
     if (isSamePath) return;
     document.cookie = `previousPath=${currentPath}`;
+
+    if (!routes[currentPath as "/"])
+      return console.error("No enter animation for this page: " + currentPath);
 
     routes[currentPath as "/"].doEnterAnimation();
   }, [currentPath]);

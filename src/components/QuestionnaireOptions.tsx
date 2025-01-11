@@ -93,7 +93,9 @@ function useQuestionnaireState() {
     const [selectedOption, setSelectedOption] = useState<
         CurrentPrevious<number | null>
     >({
-        current: Number(URL.queryParams.answers[questionIndex.current]) || null,
+        current: URL.queryParams.answers[questionIndex.current]
+            ? Number(URL.queryParams.answers[questionIndex.current])
+            : null,
         previous: null,
     });
 

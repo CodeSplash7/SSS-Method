@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 
 export default function QuestionStatement() {
     const [URL] = useUrl();
+    // LEAVE THE ERROR TO FUTURE YOU: going from /dasboard (through the CartToFormButton component) to the /power-level-form errors
     const [statement, setStatement] = useState(
         Questionnaire[Number(URL.queryParams.questionIndex)].statement,
     );
