@@ -1,22 +1,38 @@
 "use client";
 
+// types
 import { QuestionOption } from "@/types/QuestionnaireTypes";
+
+// hooks
 import useUrl from "@/hooks/useUrl";
 import { useEffect, useState } from "react";
+
+// animations
 import {
     handleDeselectAnimation,
     handlePartialDeselectAnimation,
     handlePartialSelectAnimation,
     handleSelectAnimation,
 } from "@/animations/optionsAnimations";
-
 import {
     slideOut as slideOutForm,
     slideIn as slideInForm,
 } from "@/animations/formContentSlideAnimation";
+
+// utils
 import delay from "@/general-utils/delay";
+
+// data
 import Questionnaire from "@/general-utils/Questionnaire";
+
+// components
 import NextQuestionButton from "./NextQuestionButton";
+import QuestionnaireOption from "./QuestionnaireOption";
+
+type CurrentPrevious<T> = {
+    current: T;
+    previous: T;
+};
 
 function useAnimations() {
     const [URL] = useUrl();
@@ -36,9 +52,11 @@ function useAnimations() {
         inBetweenCallback?: () => void,
     ) {
         if (isAnimating) return;
+
         setIsAnimating(true);
         setHasChangedQuestion(false);
 
+        // conditions
         const hasSelected = selectedOption.current !== null;
         const hasChangedSelection =
             selectedOption.current !== selectedOption.previous &&
@@ -67,18 +85,16 @@ function useAnimations() {
 function useQuestionnaireState() {
     const [URL] = useUrl();
 
-    const [questionIndex, setQuestionIndex] = useState<{
-        current: number;
-        previous: number;
-    }>({
-        current: Number(URL.queryParams.questionIndex),
-        previous: Number(URL.queryParams.questionIndex),
-    });
+    const [questionIndex, setQuestionIndex] = useState<CurrentPrevious<number>>(
+        {
+            current: Number(URL.queryParams.questionIndex),
+            previous: Number(URL.queryParams.questionIndex),
+        },
+    );
 
-    const [selectedOption, setSelectedOption] = useState<{
-        current: number | null;
-        previous: number | null;
-    }>({
+    const [selectedOption, setSelectedOption] = useState<
+        CurrentPrevious<number | null>
+    >({
         current: Number(URL.queryParams.answers[questionIndex.current]),
         previous: null,
     });
@@ -121,7 +137,6 @@ export default function QuestionnaireOptions({
 
     useEffect(() => {
         const chosenAnswer = URL.queryParams.answers[questionIndex.current];
-
         const hasAnswered = !!chosenAnswer;
 
         (async () => {
@@ -176,40 +191,5 @@ export default function QuestionnaireOptions({
             </div>
             <NextQuestionButton selectedOption={selectedOption} />
         </>
-    );
-}
-
-function QuestionnaireOption({
-    onSelect,
-    option,
-    optionIndex,
-}: {
-    onSelect: () => Promise<void>;
-    option: QuestionOption;
-    optionIndex: number;
-}) {
-    return (
-        <div
-            id={`option${optionIndex}`}
-            onClick={async () => {
-                await onSelect();
-            }}
-            data-index={String(optionIndex)}
-            className="option relative font-[400] overflow-hidden text-[#062f33] hover:bg-white bg-[#e9ecef] border border-[2px] transition duration-150 hover:border-[#1cbac8] border-transparent rounded-[6px] min-h-fit flex justify-between items-center px-[9px] py-[10px]"
-        >
-            <div className="option-response flex gap-[3px] relative left-0">
-                <div>{option.emoji}</div>
-                <div>{option.answer}</div>
-                <div className="hidden-emoji opacity-0 relative">
-                    {option.emoji}
-                </div>
-            </div>
-            <div
-                style={{ transform: "translateX(0%)" }}
-                className="option-detail relative text-[#6b6868]"
-            >
-                {option.detail}
-            </div>
-        </div>
     );
 }
