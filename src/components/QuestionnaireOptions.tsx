@@ -52,7 +52,6 @@ function useAnimations() {
         inBetweenCallback?: () => void,
     ) {
         if (isAnimating) return;
-
         setIsAnimating(true);
         setHasChangedQuestion(false);
 
@@ -91,11 +90,10 @@ function useQuestionnaireState() {
             previous: Number(URL.queryParams.questionIndex),
         },
     );
-
     const [selectedOption, setSelectedOption] = useState<
         CurrentPrevious<number | null>
     >({
-        current: Number(URL.queryParams.answers[questionIndex.current]),
+        current: Number(URL.queryParams.answers[questionIndex.current]) || null,
         previous: null,
     });
 

@@ -1,5 +1,5 @@
+import Questionnaire from "@/general-utils/Questionnaire";
 import PreviousQuestionButton from "./PreviousQuestionButton";
-import QuestionnaireOptions from "./QuestionnaireOptions";
 
 export default function ProgressBar({
     questionIndex,
@@ -17,7 +17,7 @@ export default function ProgressBar({
             <div
                 id="progress-fill"
                 style={{
-                    width: `${((Number(questionIndex) + 1) * 100) / QuestionnaireOptions.length}%`,
+                    width: `${((Number(questionIndex) + 1) * 100) / Questionnaire.length}%`,
                 }}
                 className="min-h-[3px] h-full bg-[#d30c7b] duration-[.6s] transition-width ease-in-out flex items-center justify-center text-white font-bold"
             >
