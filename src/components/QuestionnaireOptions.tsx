@@ -28,6 +28,7 @@ import Questionnaire from "@/general-utils/Questionnaire";
 // components
 import NextQuestionButton from "./NextQuestionButton";
 import QuestionnaireOption from "./QuestionnaireOption";
+import usePath from "@/hooks/usePath";
 
 type CurrentPrevious<T> = {
     current: T;
@@ -93,14 +94,14 @@ function useQuestionnaireState() {
     const [selectedOption, setSelectedOption] = useState<
         CurrentPrevious<number | null>
     >({
-        current: URL.queryParams.answers[questionIndex.current]
+        current: URL.queryParams.answers?.[questionIndex.current]
             ? Number(URL.queryParams.answers[questionIndex.current])
             : null,
         previous: null,
     });
 
     const [currentOptions, setCurrentOptions] = useState<QuestionOption[]>(
-        Questionnaire[Number(URL.queryParams.questionIndex)].options,
+        Questionnaire[Number(URL.queryParams.questionIndex)]?.options,
     );
 
     useEffect(() => {
@@ -127,7 +128,6 @@ export default function QuestionnaireOptions({
     // hooks
     const [URL] = useUrl();
     const { runSelectAnimation, isAnimating } = useAnimations();
-
     // state
     const [
         [selectedOption, setSelectedOption],
@@ -136,18 +136,19 @@ export default function QuestionnaireOptions({
     ] = useQuestionnaireState();
 
     useEffect(() => {
-        const chosenAnswer = URL.queryParams.answers[questionIndex.current];
+        const chosenAnswer = URL.queryParams.answers?.[questionIndex.current];
         const hasAnswered = !!chosenAnswer;
 
+        const hasWentBack = questionIndex.current < questionIndex.previous;
+        const hasChangedQuestion =
+            questionIndex.current !== questionIndex.previous &&
+            (URL.queryParams.answers?.length ?? 0 > 0);
+
         (async () => {
-            const hasWentBack = questionIndex.current < questionIndex.previous;
-            const hasChangedQuestion =
-                questionIndex.current !== questionIndex.previous;
-
             if (hasChangedQuestion)
-                await slideOutForm(hasWentBack ? "right" : "left");
+                slideOutForm(hasWentBack ? "right" : "left");
 
-            setCurrentOptions(Questionnaire[questionIndex.current].options);
+            setCurrentOptions(Questionnaire[questionIndex.current]?.options);
             setSelectedOption({
                 current: hasAnswered ? Number(chosenAnswer) : null,
                 previous: selectedOption.current,
@@ -168,26 +169,27 @@ export default function QuestionnaireOptions({
         <>
             <div
                 id="options"
-                style={{ opacity: `${Number(isSameRoute)}` }}
+                style={{ opacity: `1` }}
                 className="z-[10] h-full flex flex-col justify-start gap-[8px] w-[95%] text-[0.9rem] mt-[40px] overflow-y-scroll"
             >
-                {currentOptions.map((option, index) => (
-                    <QuestionnaireOption
-                        key={index}
-                        onSelect={async () => {
-                            if (isAnimating) return;
-                            setSelectedOption({
-                                current:
-                                    selectedOption.current === index
-                                        ? null
-                                        : index,
-                                previous: selectedOption.current,
-                            });
-                        }}
-                        option={option}
-                        optionIndex={index}
-                    />
-                ))}
+                {currentOptions &&
+                    currentOptions.map((option, index) => (
+                        <QuestionnaireOption
+                            key={index}
+                            onSelect={async () => {
+                                if (isAnimating) return;
+                                setSelectedOption({
+                                    current:
+                                        selectedOption.current === index
+                                            ? null
+                                            : index,
+                                    previous: selectedOption.current,
+                                });
+                            }}
+                            option={option}
+                            optionIndex={index}
+                        />
+                    ))}
             </div>
             <NextQuestionButton selectedOption={selectedOption} />
         </>

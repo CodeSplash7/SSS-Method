@@ -1,22 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
-import { routes } from "@/general-utils/app-routes";
-import usePath from "@/hooks/usePath";
-
 export default function PageEnterAnimation() {
-  const { currentPath, isSamePath } = usePath();
-
-  useEffect(() => {
-    if (isSamePath) return;
-    document.cookie = `previousPath=${currentPath}`;
-
-    if (!routes[currentPath as "/"])
-      return console.error("No enter animation for this page: " + currentPath);
-
-    routes[currentPath as "/"].doEnterAnimation();
-  }, [currentPath]);
-
   return (
     <>
       {pageTransitioner}

@@ -27,7 +27,7 @@ async function handleHideAnimation() {
 
 export default function PreviousQuestionButton() {
     // hooks
-    const [URL, setURL] = useUrl();
+    const [URL, _0, _1, goToUrl] = useUrl();
     // state
     const [isVisible, setIsVisible] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
@@ -53,10 +53,10 @@ export default function PreviousQuestionButton() {
         const newURL = { ...URL };
         if (!isVisible || isAnimating) return;
 
-        newURL.queryParams.questionIndex = String(
-            Number(newURL.queryParams.questionIndex) - 1,
-        );
-        setURL(newURL);
+        goToUrl("power-level-form", {
+            questionIndex: String(Number(newURL.queryParams.questionIndex) - 1),
+            answers: newURL.queryParams.answers,
+        });
     }
 
     return (

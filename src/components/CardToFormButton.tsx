@@ -2,9 +2,8 @@
 
 import { animate } from "@/general-utils/app-routes";
 import useUrl from "@/hooks/useUrl";
-
 export default function CardToFormButton() {
-    const [URL, setURL] = useUrl();
+    const [URL, _0, _1, goToUrl] = useUrl();
     const transformBgBlock = async () => {
         const previousBgElement = document.getElementById(
             "previous-bg-element",
@@ -13,7 +12,6 @@ export default function CardToFormButton() {
 
         const element = document.getElementById("button-to-form");
         if (!element) return;
-        const rect = element.getBoundingClientRect();
 
         animate(".child", {
             duration: 0.4,
@@ -114,12 +112,15 @@ export default function CardToFormButton() {
         <div
             onClick={async () => {
                 await transformBgBlock();
-                const newURL = {
-                    ...URL,
-                    route: "power-level-form",
-                    queryParams: { questionIndex: "0", answers: "" },
+
+                const newRoute = "power-level-form";
+                const newQueryParams = {
+                    questionIndex: "0",
+                    answers: "",
+                    redirect: "true",
                 };
-                setURL(newURL);
+
+                goToUrl(newRoute, newQueryParams);
             }}
             id="button-to-form"
             className="absolute z-[10] bottom-[36px] bg-[#1cbac8] w-[262.5px] h-[60px] flex items-center justify-center rounded-[15px] text-white text-[22.5px] font-bold"

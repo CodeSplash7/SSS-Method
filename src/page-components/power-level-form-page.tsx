@@ -3,15 +3,17 @@ import ProgressBar from "@/components/ProgressBar";
 import QuestionPrompt from "@/components/QuestionPrompt";
 // animation handlers
 import ScaleFormOnScrollAnimationHandler from "@/components/ScaleFormOnScrollAnimationHandler";
+import Questionnaire from "@/general-utils/Questionnaire";
 // hooks
 import { cookies } from "next/headers";
+import { Suspense } from "react";
 
 export default async function PowerLevelFormPage({
     searchParams,
     params,
 }: {
     params: Record<symbol, any>;
-    searchParams: { questionIndex: string };
+    searchParams: { questionIndex: string; answers: string };
 }) {
     const currentRoute = params[Object.getOwnPropertySymbols(params)[7]].route;
     const isSameRoute =

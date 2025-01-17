@@ -4,7 +4,6 @@ import Navbar from "@/components/Navbar";
 import Parallax from "@/components/Parallax";
 import StartButton from "@/components/StartButton";
 import { font_roboto_500 } from "@/general-utils/fonts";
-import Link from "next/link";
 
 export default async function HomePage() {
   return (
