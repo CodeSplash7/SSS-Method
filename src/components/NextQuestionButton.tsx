@@ -80,7 +80,7 @@ export default function NextQuestionButton({
         let { answers } = { ...newURL.queryParams };
         answers += String(selectedOption.current);
 
-        goToUrl("assessment", { answers, questionIndex: null, redirect: null });
+        goToUrl("plan-ready", { answers, questionIndex: null, redirect: null });
     }
 
     return (

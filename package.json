@@ -11,11 +11,14 @@
   "dependencies": {
     "@clerk/nextjs": "^6.5.1",
     "@clerk/types": "^4.35.0",
+    "chart.js": "^4.4.7",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "gsap": "^3.12.5",
     "mongoose": "^8.8.3",
     "next": "^15.0.3",
     "next-transition-router": "^0.2.6",
     "react": "^18.3.1",
+    "react-chartjs-2": "^5.3.0",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
