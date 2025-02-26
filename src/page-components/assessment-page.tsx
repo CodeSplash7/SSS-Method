@@ -1,3 +1,4 @@
+import Carousel from "@/components/Carousel";
 import ExercisesPreview from "@/components/ExercisesPreview";
 import Navbar from "@/components/Navbar";
 import PathToMastery from "@/components/PathToMastery";

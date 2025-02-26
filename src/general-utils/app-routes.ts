@@ -1,12 +1,11 @@
 "use client";
 
 import gsap from "gsap";
-import { CSSProperties } from "react";
 import delay from "@/general-utils/delay";
 
 type Animation = {
-  fromStyles: CSSProperties;
-  toStyles: CSSProperties;
+  fromStyles: gsap.TweenVars;
+  toStyles: gsap.TweenVars;
   easeFunc: gsap.EaseString;
   duration: number;
 };
