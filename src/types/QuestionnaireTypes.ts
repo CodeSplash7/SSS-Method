@@ -1,9 +1,10 @@
 export type QuestionOption = {
-    answer: string;
-    detail: string;
-    emoji: string;
+  answer: string;
+  detail: string;
+  emoji: string;
 };
 export type Question = {
-    statement: string;
-    options: QuestionOption[];
+  id: number;
+  statement: string;
+  options: QuestionOption[];
 };

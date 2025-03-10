@@ -1,7 +1,7 @@
 export default function replaceCharAtIndex(
   mainString: string,
   index: number,
-  replacement: string,
+  replacement: string
 ): string {
   if (index < 0 || index >= mainString.length) {
     throw new Error("Index is out of bounds.");

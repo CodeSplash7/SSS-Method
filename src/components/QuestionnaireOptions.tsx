@@ -9,14 +9,14 @@ import { useEffect, useState } from "react";
 
 // animations
 import {
-    handleDeselectAnimation,
-    handlePartialDeselectAnimation,
-    handlePartialSelectAnimation,
-    handleSelectAnimation,
+  handleDeselectAnimation,
+  handlePartialDeselectAnimation,
+  handlePartialSelectAnimation,
+  handleSelectAnimation
 } from "@/animations/optionsAnimations";
 import {
-    slideOut as slideOutForm,
-    slideIn as slideInForm,
+  slideOut as slideOutForm,
+  slideIn as slideInForm
 } from "@/animations/formContentSlideAnimation";
 
 // utils
@@ -31,167 +31,162 @@ import QuestionnaireOption from "./QuestionnaireOption";
 import usePath from "@/hooks/usePath";
 
 type CurrentPrevious<T> = {
-    current: T;
-    previous: T;
+  current: T;
+  previous: T;
 };
 
 function useAnimations() {
-    const [URL] = useUrl();
+  const [URL] = useUrl();
 
-    const [isAnimating, setIsAnimating] = useState(false);
-    const [hasChangedQuestion, setHasChangedQuestion] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [hasChangedQuestion, setHasChangedQuestion] = useState(false);
 
-    useEffect(() => {
-        setHasChangedQuestion(true);
-    }, [URL.queryParams.questionIndex]);
+  useEffect(() => {
+    setHasChangedQuestion(true);
+  }, [URL.queryParams.questionIndex]);
 
-    async function runSelectAnimation(
-        selectedOption: {
-            current: number | null;
-            previous: number | null;
-        },
-        inBetweenCallback?: () => void,
-    ) {
-        if (isAnimating) return;
-        setIsAnimating(true);
-        setHasChangedQuestion(false);
+  async function runSelectAnimation(
+    selectedOption: {
+      current: number | null;
+      previous: number | null;
+    },
+    inBetweenCallback?: () => void
+  ) {
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setHasChangedQuestion(false);
 
-        // conditions
-        const hasSelected = selectedOption.current !== null;
-        const hasChangedSelection =
-            selectedOption.current !== selectedOption.previous &&
-            selectedOption.previous !== null;
+    // conditions
+    const hasSelected = selectedOption.current !== null;
+    const hasChangedSelection =
+      selectedOption.current !== selectedOption.previous &&
+      selectedOption.previous !== null;
 
-        if (hasSelected && (!hasChangedSelection || hasChangedQuestion)) {
-            await handleSelectAnimation(selectedOption.current!);
-        }
-
-        if (hasSelected && hasChangedSelection) {
-            await handlePartialSelectAnimation(selectedOption.current!);
-            await handlePartialDeselectAnimation(selectedOption.previous!);
-        }
-        if (!hasSelected && hasChangedSelection) {
-            await handleDeselectAnimation(selectedOption.previous!);
-        }
-
-        inBetweenCallback?.();
-
-        await delay(500);
-        setIsAnimating(false);
+    if (hasSelected && (!hasChangedSelection || hasChangedQuestion)) {
+      await handleSelectAnimation(selectedOption.current!);
     }
-    return { runSelectAnimation, isAnimating };
+
+    if (hasSelected && hasChangedSelection) {
+      await handlePartialSelectAnimation(selectedOption.current!);
+      await handlePartialDeselectAnimation(selectedOption.previous!);
+    }
+    if (!hasSelected && hasChangedSelection) {
+      await handleDeselectAnimation(selectedOption.previous!);
+    }
+
+    inBetweenCallback?.();
+
+    await delay(500);
+    setIsAnimating(false);
+  }
+  return { runSelectAnimation, isAnimating };
 }
 
 function useQuestionnaireState() {
-    const [URL] = useUrl();
+  const [URL] = useUrl();
 
-    const [questionIndex, setQuestionIndex] = useState<CurrentPrevious<number>>(
-        {
-            current: Number(URL.queryParams.questionIndex),
-            previous: Number(URL.queryParams.questionIndex),
-        },
-    );
-    const [selectedOption, setSelectedOption] = useState<
-        CurrentPrevious<number | null>
-    >({
-        current: URL.queryParams.answers?.[questionIndex.current]
-            ? Number(URL.queryParams.answers[questionIndex.current])
-            : null,
-        previous: null,
+  const [questionIndex, setQuestionIndex] = useState<CurrentPrevious<number>>({
+    current: Number(URL.queryParams.questionIndex),
+    previous: Number(URL.queryParams.questionIndex)
+  });
+  const [selectedOption, setSelectedOption] = useState<
+    CurrentPrevious<number | null>
+  >({
+    current: URL.queryParams.answers?.[questionIndex.current]
+      ? Number(URL.queryParams.answers[questionIndex.current])
+      : null,
+    previous: null
+  });
+
+  const [currentOptions, setCurrentOptions] = useState<QuestionOption[]>(
+    Questionnaire[Number(URL.queryParams.questionIndex)]?.options
+  );
+
+  useEffect(() => {
+    if (questionIndex.current === Number(URL.queryParams.questionIndex)) return;
+    setQuestionIndex({
+      current: Number(URL.queryParams.questionIndex),
+      previous: questionIndex.current
     });
+  }, [URL.queryParams.questionIndex]);
 
-    const [currentOptions, setCurrentOptions] = useState<QuestionOption[]>(
-        Questionnaire[Number(URL.queryParams.questionIndex)]?.options,
-    );
-
-    useEffect(() => {
-        if (questionIndex.current === Number(URL.queryParams.questionIndex))
-            return;
-        setQuestionIndex({
-            current: Number(URL.queryParams.questionIndex),
-            previous: questionIndex.current,
-        });
-    }, [URL.queryParams.questionIndex]);
-
-    return [
-        [selectedOption, setSelectedOption],
-        [currentOptions, setCurrentOptions],
-        questionIndex,
-    ] as const;
+  return [
+    [selectedOption, setSelectedOption],
+    [currentOptions, setCurrentOptions],
+    questionIndex
+  ] as const;
 }
 
 export default function QuestionnaireOptions({
-    isSameRoute,
+  isSameRoute
 }: {
-    isSameRoute: boolean;
+  isSameRoute: boolean;
 }) {
-    // hooks
-    const [URL] = useUrl();
-    const { runSelectAnimation, isAnimating } = useAnimations();
-    // state
-    const [
-        [selectedOption, setSelectedOption],
-        [currentOptions, setCurrentOptions],
-        questionIndex,
-    ] = useQuestionnaireState();
+  // hooks
+  const [URL] = useUrl();
+  const { runSelectAnimation, isAnimating } = useAnimations();
+  // state
 
-    useEffect(() => {
-        const chosenAnswer = URL.queryParams.answers?.[questionIndex.current];
-        const hasAnswered = !!chosenAnswer;
+  const [
+    [selectedOption, setSelectedOption],
+    [currentOptions, setCurrentOptions],
+    questionIndex
+  ] = useQuestionnaireState();
 
-        const hasWentBack = questionIndex.current < questionIndex.previous;
-        const hasChangedQuestion =
-            questionIndex.current !== questionIndex.previous &&
-            (URL.queryParams.answers?.length ?? 0 > 0);
+  useEffect(() => {
+    const chosenAnswer = URL.queryParams.answers?.[questionIndex.current];
+    const hasAnswered = !!chosenAnswer;
 
-        (async () => {
-            if (hasChangedQuestion)
-                slideOutForm(hasWentBack ? "right" : "left");
+    const hasWentBack = questionIndex.current < questionIndex.previous;
+    const hasChangedQuestion =
+      questionIndex.current !== questionIndex.previous &&
+      (URL.queryParams.answers?.length ?? 0 > 0);
 
-            setCurrentOptions(Questionnaire[questionIndex.current]?.options);
-            setSelectedOption({
-                current: hasAnswered ? Number(chosenAnswer) : null,
-                previous: selectedOption.current,
-            });
+    (async () => {
+      if (hasChangedQuestion) slideOutForm(hasWentBack ? "right" : "left");
 
-            await delay(500);
+      setCurrentOptions(Questionnaire[questionIndex.current]?.options);
+      setSelectedOption({
+        current: hasAnswered ? Number(chosenAnswer) : null,
+        previous: selectedOption.current
+      });
 
-            if (hasChangedQuestion) slideInForm(hasWentBack ? "left" : "right");
-        })();
-    }, [questionIndex]);
+      await delay(500);
 
-    // handle options click animations
-    useEffect(() => {
-        runSelectAnimation(selectedOption);
-    }, [selectedOption]);
+      if (hasChangedQuestion) slideInForm(hasWentBack ? "left" : "right");
+    })();
+  }, [questionIndex]);
 
-    return (
-        <>
-            <div
-                id="options"
-                style={{ opacity: `1` }}
-                className="z-[10] h-full flex flex-col justify-start gap-[8px] w-[95%] text-[0.9rem] mt-[40px] overflow-y-scroll"
-            >
-                {currentOptions &&
-                    currentOptions.map((option, index) => (
-                        <QuestionnaireOption
-                            key={index}
-                            onSelect={async () => {
-                                if (isAnimating) return;
-                                setSelectedOption({
-                                    current:
-                                        selectedOption.current === index
-                                            ? null
-                                            : index,
-                                    previous: selectedOption.current,
-                                });
-                            }}
-                            option={option}
-                            optionIndex={index}
-                        />
-                    ))}
-            </div>
-            <NextQuestionButton selectedOption={selectedOption} />
-        </>
-    );
+  // handle options click animations
+  useEffect(() => {
+    runSelectAnimation(selectedOption);
+  }, [selectedOption]);
+
+  return (
+    <>
+      <div
+        id="options"
+        style={{ opacity: `1` }}
+        className="z-[10] h-full flex flex-col justify-start gap-[8px] w-[95%] text-[0.9rem] mt-[40px] overflow-y-scroll"
+      >
+        {currentOptions &&
+          currentOptions.map((option, index) => (
+            <QuestionnaireOption
+              key={index}
+              onSelect={async () => {
+                if (isAnimating) return;
+                setSelectedOption({
+                  current: selectedOption.current === index ? null : index,
+                  previous: selectedOption.current
+                });
+              }}
+              option={option}
+              optionIndex={index}
+            />
+          ))}
+      </div>
+      <NextQuestionButton selectedOption={selectedOption} />
+      <NextQuestionButton selectedOption={selectedOption} />
+    </>
+  );
 }
