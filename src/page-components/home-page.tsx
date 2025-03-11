@@ -1,4 +1,3 @@
-import Br from "@/components/LineBreak";
 import Logo from "@/components/Logo";
 import Navbar from "@/components/Navbar";
 import Parallax from "@/components/Parallax";
@@ -13,14 +12,14 @@ export default async function HomePage() {
         <div
           className={`h-[calc(100vh-76px)] w-full px-[48px] bg-[rgba(0,0,0,0.5)]`}
         >
-          <Br count={3} />
+          <br />
+          <br />
+          <br />
           <Logo />
-          <Br />
+          <br />
           <Motto msg="The best strength program ever." />
-          <Br count={2} />
-          <div className={"sm:hidden"}>
-            <Br count={6} />
-          </div>
+          <br />
+          <br />
           <StartButton />
         </div>
       </Parallax>

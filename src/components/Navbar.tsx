@@ -10,9 +10,9 @@ export default function Navbar() {
   const currentPath = usePathname();
 
   const links: NavLink[] = [
-    // ["Home", "/"],
+    ["Home", "/"],
     ["Sign in", "/sign-in"],
-    // ["Sign up", "/sign-up"]
+    ["Sign up", "/sign-up"]
   ];
 
   return (
