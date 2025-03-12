@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import "@/app/globals.css";
+import "@/style/globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import PageEnterAnimation from "@/components/PageEnterAnimation";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,7 +19,10 @@ export default function RootLayout({
       signInForceRedirectUrl="/dashboard"
     >
       <html lang="en">
-        <body>{children}</body>
+        <body className="relative">
+          {children}
+          <PageEnterAnimation />
+        </body>
       </html>
     </ClerkProvider>
   );
