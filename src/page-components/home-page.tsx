@@ -7,7 +7,7 @@ import { font_roboto_500 } from "@/general-utils/fonts";
 
 export default async function HomePage() {
   return (
-    <div className="w-full h-fit">
+    <div className="relative w-full h-fit home">
       <Navbar />
 
       <Parallax imagePath="/calisthenics-image.png">
