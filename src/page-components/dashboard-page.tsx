@@ -4,6 +4,7 @@ import { StrengthProfile } from "@/types/UserTypes";
 import type { User as UserType } from "@clerk/backend";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 /**
  * Page component
