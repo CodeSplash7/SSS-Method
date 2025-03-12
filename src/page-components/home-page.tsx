@@ -2,8 +2,8 @@ import Br from "@/components/LineBreak";
 import Logo from "@/components/Logo";
 import Navbar from "@/components/Navbar";
 import Parallax from "@/components/Parallax";
+import StartButton from "@/components/StartButton";
 import { font_roboto_500 } from "@/general-utils/fonts";
-import { SignUpButton } from "@clerk/nextjs";
 
 export default async function HomePage() {
   return (
@@ -29,6 +29,13 @@ export default async function HomePage() {
   );
 }
 
+/**
+ * A motto component
+ * - white text, 24px font, roboto
+ *
+ * @param {{ msg: string }} message motto message
+ * @returns {*}
+ */
 function Motto({ msg }: { msg: string }) {
   return (
     <div
@@ -39,14 +46,3 @@ function Motto({ msg }: { msg: string }) {
   );
 }
 
-function StartButton() {
-  return (
-    <SignUpButton>
-      <div
-        className={`sm:text-[1rem] text-[2rem] flex justify-center px-[30px] w-full sm:w-fit py-[20px] sm:py-[12.5px] border-0 rounded-full bg-[#1cbac8] text-white font-bold transition-all duration-200 hover:bg-[#ffbe5c] hover:shadow-[0_0_100px_#ffbe5c75] hover:scale-110 active:bg-[#1cbac8] active:duration-250 active:shadow-none active:scale-95`}
-      >
-        START 🗿
-      </div>
-    </SignUpButton>
-  );
-}
