@@ -11,7 +11,7 @@ import { redirect } from "next/navigation";
  *
  * @export
  * @async
- * @returns {unknown}
+ * @returns {React.ReactNode}
  */
 export default async function DashboardPage() {
   const user = await currentUser();
@@ -22,8 +22,6 @@ export default async function DashboardPage() {
 
   if (!hasPerformanceData)
     return (
-      <div className="w-screen h-screen bg-[#1cbac875] flex justify-center items-center">
-        <div className="w-[600px] bg-white flex flex-col p-[48px] justify-start items-center gap-[32px] rounded-[14px]">
           <div className="bg-red-500 text-white font-bold text-[20px] text-center rounded-full px-[32px] py-[12px]">
             ONE MORE STEP!
           </div>
@@ -48,7 +46,7 @@ export default async function DashboardPage() {
 
 /**
  * Ensures the user exists on the database from its Id
- * If it exists, it returns it
+ * If it exists, it returns the user
  * If it does not, it runs the callback function adn returns null
  *
  * @async
@@ -81,7 +79,7 @@ const createUser = async (user: UserType) => {
     clerkId: user.id,
     name: user.fullName,
     email: user.emailAddresses[0].emailAddress,
-    strengthProfile: defaultStrengthProfile
+    strengthProfile: defaultStrengthProfile,
   });
 
   await newUser.save();
@@ -97,11 +95,11 @@ const defaultStrengthProfile: StrengthProfile = [
   {
     name: "Pullups",
     peakPerformance: { reps: 0, weight: 0 },
-    currentPerformance: { reps: 0, weight: 0 }
+    currentPerformance: { reps: 0, weight: 0 },
   },
   {
     name: "Dips",
     peakPerformance: { reps: 0, weight: 0 },
-    currentPerformance: { reps: 0, weight: 0 }
-  }
+    currentPerformance: { reps: 0, weight: 0 },
+  },
 ];
