@@ -3,8 +3,8 @@ export default function Br({ count = 1 }: { count?: number }) {
     <>
       {Array(count)
         .fill("")
-        .map(() => (
-          <br />
+        .map((_, i) => (
+          <br key={i}/>
         ))}
     </>
   );
