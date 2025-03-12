@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "./loading-dots.css";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+} */
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+}
+
+html {
+  @apply w-full h-fit overflow-x-hidden;
+}
+
+body {
+  @apply w-full h-fit overflow-x-hidden;
+}
+
+* {
+
+  margin: 0;
+  padding: 0;
+
+  box-sizing: border-box;
+  /* outline: 1px solid black; */
+
+}

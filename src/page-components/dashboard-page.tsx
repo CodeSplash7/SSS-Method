@@ -22,6 +22,8 @@ export default async function DashboardPage() {
 
   if (!hasPerformanceData)
     return (
+      <div className="z-30 w-screen h-screen bg-[#1cbac875] flex justify-center items-center">
+        <div className="w-[600px] scale-75 bg-white flex flex-col p-[48px] justify-start items-center gap-[32px] rounded-[14px]">
           <div className="bg-red-500 text-white font-bold text-[20px] text-center rounded-full px-[32px] py-[12px]">
             ONE MORE STEP!
           </div>
