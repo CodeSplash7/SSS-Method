@@ -4,12 +4,17 @@ import mongoose, { ConnectOptions } from "mongoose";
 const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
-  throw new Error("Please define the MONGODB_URI environment variable in your .env file");
+  throw new Error(
+    "Please define the MONGODB_URI environment variable in your .env file"
+  );
 }
 
 // Global variable to store the cached connection
 declare global {
-  var mongooseCache: { conn: typeof mongoose | null; promise: Promise<typeof mongoose> | null };
+  var mongooseCache: {
+    conn: typeof mongoose | null;
+    promise: Promise<typeof mongoose> | null;
+  };
 }
 
 let cached = global.mongooseCache;
@@ -25,10 +30,12 @@ export async function connectToDatabase(): Promise<typeof mongoose> {
 
   if (!cached.promise) {
     const options: ConnectOptions = {
-      bufferCommands: false,
+      bufferCommands: false
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI!, options).then((mongooseInstance) => mongooseInstance);
+    cached.promise = mongoose
+      .connect(MONGODB_URI!, options)
+      .then((mongooseInstance) => mongooseInstance);
   }
 
   cached.conn = await cached.promise;
