@@ -1,9 +1,13 @@
 "use client";
 
 import { font_roboto_700 } from "@/general-utils/fonts";
-import { SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
-
-type NavLink = [string, string | Function];
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignUpButton,
+  UserButton
+} from "@clerk/nextjs";
 
 export default function Navbar() {
   return (
@@ -26,6 +30,9 @@ export default function Navbar() {
           </div>
         </SignUpButton>
       </SignedOut>
+      <SignedIn>
+        <UserButton />
+      </SignedIn>
     </div>
   );
 }
