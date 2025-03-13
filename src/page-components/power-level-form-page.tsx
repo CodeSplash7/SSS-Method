@@ -40,8 +40,14 @@ export default function PowerLevelFormPage({
                         id="progress-bar"
                         className="w-full h-[12px] bg-[#e7e5e5] rounded-[3px] text-[7.5px]"
                     >
-                        <div className="min-h-[3px] h-full w-1/3 bg-[#d30c7b] flex items-center justify-center text-white font-bold">
-                            1/3
+
+                        <div
+                            style={{
+                                width: `${(Number(searchParams.questionIndex) + 1) * 33.3333}%`,
+                            }}
+                            className="min-h-[3px] h-full bg-[#d30c7b] flex items-center justify-center text-white font-bold"
+                        >
+                            {Number(searchParams.questionIndex) + 1}/3
                         </div>
                     </div>
 
