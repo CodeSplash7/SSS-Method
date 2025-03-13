@@ -1,20 +1,9 @@
 import ScaleDownFormAnimation from "@/components/ScaleDownFormAnimation";
 
-export default function PowerLevelFormPage() {
-    return (
-        <div className="z-30 w-full h-screen flex flex-col justify-start items-center">
-            <ScaleDownFormAnimation formId="form-card" />
-            <div
-                className="w-[412.5px] h-[225px] relative top-[10px] bg-[#111111] max-w-[90%] flex flex-col p-[12px] justify-between items-center rounded-[10.5px]"
-                style={{
-                    padding: `12px`, // Reduced padding
-                }}
-            >
-=======
 export default function PowerLevelFormPage({
-    searchParams,
+  searchParams
 }: {
-    searchParams: { questionIndex: string };
+  searchParams: { questionIndex: string };
 }) {
     return (
         <div className="z-30 w-full h-screen flex flex-col justify-start items-center">
