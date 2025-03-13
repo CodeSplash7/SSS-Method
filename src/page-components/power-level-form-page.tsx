@@ -10,6 +10,23 @@ export default function PowerLevelFormPage() {
                     padding: `12px`, // Reduced padding
                 }}
             >
+=======
+export default function PowerLevelFormPage({
+    searchParams,
+}: {
+    searchParams: { questionIndex: string };
+}) {
+    return (
+        <div className="z-30 w-full h-screen flex flex-col justify-start items-center">
+            <ScaleDownFormAnimation />
+            <div
+                className="w-[412.5px] h-[225px] relative top-[10px] bg-[#111111] max-w-[90%] flex flex-col p-[12px] justify-between items-center rounded-[10.5px]"
+                style={{
+                    padding: `12px`,
+                }}
+            >
+                {/* Form title*/}
+>>>>>>> b654e7968376c633880115d05aa9946cb3429512
                 <div className="font-bold text-[22.5px] text-[#1cbac8] text-center rounded-full px-[24px] py-[9px]">
                     Power Level Form
                 </div>
