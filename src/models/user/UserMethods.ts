@@ -1,6 +1,7 @@
-import { IUser, PerformanceLevels } from "@/types/UserTypes";
+import { IUser, LiftRecord, PowerLevels } from "@/types/UserTypes";
 import { UserSchema } from "./UserModel";
 import { calculate1RM } from "@/general-utils/calculate1rm";
+import { calculatePowerLevel } from "@/general-utils/liftingMetrics";
 
 /**
  * Calculates the performance levels for a user based on their strength profile.
@@ -14,22 +15,30 @@ import { calculate1RM } from "@/general-utils/calculate1rm";
  * @param {"peak" | "current"} state - The performance state to calculate:
  * - "peak": Uses the user's best recorded performance.
  * - "current": Uses the user's current performance level.
- * @returns {PerformanceLevels} An object containing the overall performance level
+ * @returns {PowerLevels} An object containing the overall performance level
  * and individual performance levels for each exercise.
  */
-UserSchema.methods.getPerformanceLevel = function (
+UserSchema.methods.getPowerLevels = function (
   this: IUser,
-  state: "peak" | "current"
-): PerformanceLevels {
-  const performanceLevels: PerformanceLevels = {
-    overall: 0
+  state: "peak" | "current",
+): PowerLevels {
+  const powerLevels: PowerLevels = {
+    overall: 0,
   };
   for (let exercise of this.strengthProfile) {
-    const performanceLevel = calculate1RM(exercise[`${state}Performance`]);
-    performanceLevels[exercise.name] = performanceLevel;
-    performanceLevels.overall =
-      (performanceLevel + performanceLevels.overall) /
-      (Object.keys(performanceLevels).length - 1);
+    // identify the lift
+    const liftId = exercise[`${state}LiftId` as "peakLiftId" | "currentLiftId"];
+    const lift = this.liftHistory.find(
+      (liftRecord: LiftRecord) => liftRecord._id === liftId,
+    );
+    if (!lift) continue;
+
+    // append the value
+    const powerLevel = lift?.parameters.powerLevel;
+    powerLevels[exercise.name] = powerLevel;
+    powerLevels.overall =
+      (powerLevel + powerLevels.overall) /
+      (Object.keys(powerLevels).length - 1);
   }
-  return performanceLevels;
+  return powerLevels;
 };
