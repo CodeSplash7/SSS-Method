@@ -15,7 +15,6 @@ export default function PowerLevelFormPage({
                 }}
             >
                 {/* Form title*/}
->>>>>>> b654e7968376c633880115d05aa9946cb3429512
                 <div className="font-bold text-[22.5px] text-[#1cbac8] text-center rounded-full px-[24px] py-[9px]">
                     Power Level Form
                 </div>
