@@ -50,39 +50,102 @@ export default function PowerLevelFormPage({
                             {Number(searchParams.questionIndex) + 1}/3
                         </div>
                     </div>
-
-                    <div
-                        id="question"
-                        className="text-[#343a40] text-[22.5px] h-fit text-center font-bold mt-[12px]"
-                        style={{
-                            fontSize: `22.5px`, // Reduced font size
-                            marginTop: `12px`, // Reduced margin
-                        }}
-                    >
-                        What is your level at pullups?
-                    </div>
-
-                    <div
-                        id="options"
-                        className="flex flex-col justify-start gap-[9px] h-fit w-full text-[0.9rem] mt-[45px] overflow-y-scroll"
-                    >
-                        {new Array(6).fill(0).map((_, index) => (
-                            <div
-                                key={index}
-                                className="option bg-[#e9ecef] rounded-[6px] h-fit flex justify-between items-center px-[9px] py-[12px]"
-                            >
-                                <div className="flex text-[#062f33] gap-[3px]">
-                                    <div>🔧</div>
-                                    <div>Response</div>
-                                </div>
-
-                                <div className="text-[#6b6868]">Detail</div>
-                            </div>
-                        ))}
-                        <br />
-                    </div>
+                    <QuestionPrompt
+                        questionIndex={Number(searchParams.questionIndex)}
+                    />
                 </div>
             </div>
         </div>
+    );
+}
+
+
+type QuestionOption = { answer: string; detail: string; emoji: string };
+type Question = {
+    statement: string;
+    options: QuestionOption[];
+};
+
+function QuestionPrompt({ questionIndex }: { questionIndex: number }) {
+    const Questionnaire: Question[] = [
+        {
+            statement: "What is your level at pullups?",
+            options: [
+                { answer: "Beginner", detail: "0 pullups", emoji: "🔧" },
+                { answer: "Intermediate", detail: "1-15 pullups", emoji: "🔨" },
+                { answer: "Advanced", detail: "15+ pullups", emoji: "⚒️" },
+                {
+                    answer: "Master",
+                    detail: "(20kg+) x 8 Pullups",
+                    emoji: "⚔️",
+                },
+            ],
+        },
+        {
+            statement: "What is your level at dips?",
+            options: [
+                { answer: "Beginner", detail: "0 dips", emoji: "🔧" },
+                {
+                    answer: "Intermediate",
+                    detail: "1-20m dips",
+                    emoji: "🔨",
+                },
+                { answer: "Advanced", detail: "20+ dips", emoji: "⚒️" },
+                {
+                    answer: "Master",
+                    detail: "(40kg+) x 8 dips",
+                    emoji: "⚔️",
+                },
+            ],
+        },
+        {
+            statement: "Choose your program for now",
+            options: [
+                {
+                    answer: "4-day cycle",
+                    detail: "Most efficient",
+                    emoji: "⚡",
+                },
+                {
+                    answer: "Weekly",
+                    detail: "Most accesible",
+                    emoji: "🔑",
+                },
+            ],
+        },
+    ];
+    const { statement, options } = Questionnaire[questionIndex];
+    return (
+        <>
+            <div
+                id="question"
+                className="text-[#343a40] text-[22.5px] h-fit text-center font-bold mt-[12px]"
+                style={{
+                    fontSize: `22.5px`,
+                    marginTop: `12px`,
+                }}
+            >
+                {statement}
+            </div>
+            <div
+                id="options"
+                className="flex flex-col justify-start gap-[9px] h-fit w-full text-[0.9rem] mt-[40px] overflow-y-scroll"
+            >
+                {options.map((option, index) => (
+                    <div
+                        key={index}
+                        className="option bg-[#e9ecef] rounded-[6px] h-fit flex justify-between items-center px-[9px] py-[12px]"
+                    >
+                        <div className="flex text-[#062f33] gap-[3px]">
+                            <div>{option.emoji}</div>
+                            <div>{option.answer}</div>
+                        </div>
+
+                        <div className="text-[#6b6868]">{option.detail}</div>
+                    </div>
+                ))}
+                <br />
+            </div>
+        </>
     );
 }
