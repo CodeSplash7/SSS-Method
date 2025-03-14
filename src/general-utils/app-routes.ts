@@ -17,7 +17,7 @@ const DEFAULT_EASE = "power2.inOut";
 export async function animate(
   animationElementId: string,
   animation: Animation,
-  onComplete?: () => void,
+  onComplete?: () => void
 ) {
   const isClassSelector = animationElementId.startsWith(".");
   const isIdSelector = animationElementId.startsWith("#");
@@ -31,8 +31,8 @@ export async function animate(
       gsap.fromTo(element, animation.fromStyles, {
         ...animation.toStyles,
         duration: animation.duration,
-        ease: animation.easeFunc,
-      }),
+        ease: animation.easeFunc
+      })
     );
 
     await Promise.all(promises);
@@ -43,7 +43,7 @@ export async function animate(
 
   if (isIdSelector) {
     const animationElement = document.getElementById(
-      animationElementId.substring(1),
+      animationElementId.substring(1)
     );
 
     if (!animationElement) return;
@@ -51,26 +51,27 @@ export async function animate(
     await gsap.fromTo(animationElement, animation.fromStyles, {
       ...animation.toStyles,
       duration: animation.duration,
-      ease: animation.easeFunc,
+      ease: animation.easeFunc
     });
     if (onComplete) onComplete();
     return;
   }
 
-
+  console.error("Invalid selector provided. Use . for class or # for ID.");
+}
 
 async function animateSlide(
   elementId: string,
   fromTransform: string,
   toTransform: string,
   duration: number,
-  ease: gsap.EaseString,
+  ease: gsap.EaseString
 ) {
   await animate(elementId, {
     duration,
     easeFunc: ease,
     fromStyles: { transform: fromTransform },
-    toStyles: { transform: toTransform },
+    toStyles: { transform: toTransform }
   });
 }
 
@@ -85,7 +86,7 @@ export const HomeRoute = {
         "translate(0%,0)",
         "translate(-100%,0)",
         1,
-        DEFAULT_EASE,
+        DEFAULT_EASE
       ),
       // loading opposition slide (to make the illusiong of being still)
       animateSlide(
@@ -93,8 +94,8 @@ export const HomeRoute = {
         "translate(0%,0)",
         "translate(100%,0)",
         1,
-        DEFAULT_EASE,
-      ),
+        DEFAULT_EASE
+      )
     ]);
   },
   async doLeaveAnimation() {
@@ -102,24 +103,24 @@ export const HomeRoute = {
       duration: DEFAULT_DURATION,
       easeFunc: DEFAULT_EASE,
       fromStyles: {
-        transform: "translate(-100%,0)",
+        transform: "translate(-100%,0)"
       },
       toStyles: {
-        transform: "translate(0%,0)",
-      },
+        transform: "translate(0%,0)"
+      }
     });
     const childCounterSlide = animate("#animationElementChild", {
       duration: DEFAULT_DURATION,
       easeFunc: DEFAULT_EASE,
       fromStyles: {
-        transform: "translate(100%,0)",
+        transform: "translate(100%,0)"
       },
       toStyles: {
-        transform: "translate(0%,0)",
-      },
+        transform: "translate(0%,0)"
+      }
     });
     await Promise.all([await backgroundSlide, await childCounterSlide]);
-  },
+  }
 };
 
 export const DashboardRoute = {
@@ -129,21 +130,21 @@ export const DashboardRoute = {
       duration: DEFAULT_DURATION,
       easeFunc: DEFAULT_EASE,
       fromStyles: {
-        transform: "translate(0%, 0)",
+        transform: "translate(0%, 0)"
       },
       toStyles: {
-        transform: "translate(100%, 0)",
-      },
+        transform: "translate(100%, 0)"
+      }
     });
     const childCounterSlide = animate("#animationElementChild", {
       duration: DEFAULT_DURATION,
       easeFunc: DEFAULT_EASE,
       fromStyles: {
-        transform: "translate(0%,0)",
+        transform: "translate(0%,0)"
       },
       toStyles: {
-        transform: "translate(-100%,0)",
-      },
+        transform: "translate(-100%,0)"
+      }
     });
   },
   async doLeaveAnimation() {
@@ -151,24 +152,24 @@ export const DashboardRoute = {
       duration: 1,
       easeFunc: DEFAULT_EASE,
       fromStyles: {
-        transform: "translate(100%, 0)",
+        transform: "translate(100%, 0)"
       },
       toStyles: {
-        transform: "translate(0%, 0)",
-      },
+        transform: "translate(0%, 0)"
+      }
     });
     const childCounterSlide = animate("#animationElementChild", {
       duration: 1,
       easeFunc: DEFAULT_EASE,
       fromStyles: {
-        transform: "translate(-100%,0)",
+        transform: "translate(-100%,0)"
       },
       toStyles: {
-        transform: "translate(0%,0)",
-      },
+        transform: "translate(0%,0)"
+      }
     });
     await Promise.all([await backgroundSlide, await childCounterSlide]);
-  },
+  }
 };
 
 export const PowerLevelFormRoute = {
@@ -183,25 +184,25 @@ export const PowerLevelFormRoute = {
         easeFunc: "ease",
         fromStyles: { opacity: 0 },
         toStyles: {
-          opacity: 1,
-        },
+          opacity: 1
+        }
       }),
       animate("#question", {
         duration: 0.5,
         easeFunc: "ease",
         fromStyles: { opacity: 0 },
         toStyles: {
-          opacity: 1,
-        },
+          opacity: 1
+        }
       }),
       animate("#options", {
         duration: 0.5,
         easeFunc: "ease",
         fromStyles: { opacity: 0 },
         toStyles: {
-          opacity: 1,
-        },
-      }),
+          opacity: 1
+        }
+      })
     ]);
 
     animate("#progress-fill", {
@@ -209,16 +210,15 @@ export const PowerLevelFormRoute = {
       easeFunc: "ease",
       fromStyles: { width: "0px" },
       toStyles: {
-        width: `${(Number(questionIndex) + 1) * 33.3333}%`,
-      },
+        width: `${(Number(questionIndex) + 1) * 33.3333}%`
+      }
     });
   },
-
-  async doLeaveAnimation() {},
+  async doLeaveAnimation() {}
 };
 
 export const routes = {
   "/": HomeRoute,
   "/dashboard": DashboardRoute,
-  "/power-level-form": PowerLevelFormRoute,
-}
+  "/power-level-form": PowerLevelFormRoute
+};
