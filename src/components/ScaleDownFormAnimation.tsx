@@ -1,7 +1,6 @@
 "use client";
 
 import { animate } from "@/general-utils/app-routes";
-
 import { useEffect, useRef } from "react";
 
 const ScaleDownFormAnimation = () => {
@@ -31,7 +30,6 @@ const ScaleDownFormAnimation = () => {
       animate("#options", {
         duration: 0.5,
         easeFunc: "ease",
-
         fromStyles: { fontSize: "0.9rem", marginTop: "40px" }, // Reduced margin and font size
         toStyles: { fontSize: "0.675rem", marginTop: "0px" } // Adjusted font size for consistency
       });

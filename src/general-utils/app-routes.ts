@@ -1,7 +1,6 @@
 "use client";
 
 import gsap from "gsap";
-import { useRouter } from "next/navigation";
 import { CSSProperties } from "react";
 import delay from "@/general-utils/delay";
 
@@ -20,13 +19,12 @@ export async function animate(
   animation: Animation,
   onComplete?: () => void,
 ) {
-  // Check if the first character is "." or "#"
   const isClassSelector = animationElementId.startsWith(".");
   const isIdSelector = animationElementId.startsWith("#");
 
-  // Handle class selector
   if (isClassSelector) {
-    const elements = document.querySelectorAll(animationElementId); // Select all elements with the class
+    const elements = document.querySelectorAll(animationElementId);
+
     if (elements.length === 0) return;
 
     const promises = Array.from(elements).map((element) =>
@@ -37,16 +35,17 @@ export async function animate(
       }),
     );
 
-    await Promise.all(promises); // Wait for all animations to complete
+    await Promise.all(promises);
+
     if (onComplete) onComplete();
     return;
   }
 
-  // Handle ID selector
   if (isIdSelector) {
     const animationElement = document.getElementById(
       animationElementId.substring(1),
-    ); // Remove "#" for ID
+    );
+
     if (!animationElement) return;
 
     await gsap.fromTo(animationElement, animation.fromStyles, {
@@ -58,9 +57,7 @@ export async function animate(
     return;
   }
 
-  // If no valid selector is provided, do nothing
-  console.error("Invalid selector provided. Use . for class or # for ID.");
-}
+
 
 async function animateSlide(
   elementId: string,
