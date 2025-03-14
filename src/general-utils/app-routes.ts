@@ -172,7 +172,48 @@ export const DashboardRoute = {
 };
 
 export const PowerLevelFormRoute = {
-  async doEnterAnimation() {},
+  async doEnterAnimation() {
+    const questionIndex =
+      typeof window !== "undefined" &&
+      new URLSearchParams(window.location.search).get("questionIndex");
+
+    await Promise.all([
+      animate("#progress-bar", {
+        duration: 0.5,
+        easeFunc: "ease",
+        fromStyles: { opacity: 0 },
+        toStyles: {
+          opacity: 1,
+        },
+      }),
+      animate("#question", {
+        duration: 0.5,
+        easeFunc: "ease",
+        fromStyles: { opacity: 0 },
+        toStyles: {
+          opacity: 1,
+        },
+      }),
+      animate("#options", {
+        duration: 0.5,
+        easeFunc: "ease",
+        fromStyles: { opacity: 0 },
+        toStyles: {
+          opacity: 1,
+        },
+      }),
+    ]);
+
+    animate("#progress-fill", {
+      duration: 0.5,
+      easeFunc: "ease",
+      fromStyles: { width: "0px" },
+      toStyles: {
+        width: `${(Number(questionIndex) + 1) * 33.3333}%`,
+      },
+    });
+  },
+
   async doLeaveAnimation() {},
 };
 
@@ -180,4 +221,4 @@ export const routes = {
   "/": HomeRoute,
   "/dashboard": DashboardRoute,
   "/power-level-form": PowerLevelFormRoute,
-};
+}
