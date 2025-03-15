@@ -41,7 +41,7 @@ export default async function PowerLevelFormPage({
                         <div
                             id="progress-fill"
                             style={{
-                                width: `${(Number(searchParams.questionIndex) + 1) * 33.3333 * Number(isSameRoute)}%`,
+                                width: `${(((Number(searchParams.questionIndex) + 1) * 100) / Questionnaire.length) * Number(isSameRoute)}%`,
                             }}
                             className="min-h-[3px] h-full bg-[#d30c7b] duration-[.6s] transition-width ease-in-out flex items-center justify-center text-white font-bold"
                         >
