@@ -75,14 +75,13 @@ function QuestionPrompt({ isSameRoute }: { isSameRoute: boolean }) {
         >
             <div
                 id="question"
-                className="text-[#343a40] text-[22.5px] h-fit flex justify-center gap-[16px] font-bold mt-[12px]"
+                className="text-[#343a40] text-[22.5px] h-fit flex text-start gap-[16px] font-bold mt-[12px] px-[16px]"
                 style={{
                     fontSize: `22.5px`,
                     marginTop: `12px`,
                     opacity: `${Number(isSameRoute)}`,
                 }}
             >
-                {/*<PreviousQuestionButton />*/}
                 <QuestionStatement />
             </div>
             <QuestionnaireOptions isSameRoute={isSameRoute} />
