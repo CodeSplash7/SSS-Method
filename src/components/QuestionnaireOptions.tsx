@@ -93,15 +93,15 @@ function useQuestionnaireState() {
     const [selectedOption, setSelectedOption] = useState<
         CurrentPrevious<number | null>
     >({
-        current: URL.queryParams.answers[questionIndex.current]
+        current: URL.queryParams.answers?.[questionIndex.current]
             ? Number(URL.queryParams.answers[questionIndex.current])
             : null,
         previous: null,
     });
 
-  const [currentOptions, setCurrentOptions] = useState<QuestionOption[]>(
-    Questionnaire[Number(URL.queryParams.questionIndex)].options
-  );
+    const [currentOptions, setCurrentOptions] = useState<QuestionOption[]>(
+        Questionnaire[Number(URL.queryParams.questionIndex)]?.options,
+    );
 
   useEffect(() => {
     if (questionIndex.current === Number(URL.queryParams.questionIndex)) return;
@@ -146,11 +146,11 @@ export default function QuestionnaireOptions({
       if (hasChangedQuestion)
         await slideOutForm(hasWentBack ? "right" : "left");
 
-      setCurrentOptions(Questionnaire[questionIndex.current].options);
       setSelectedOption({
         current: hasAnswered ? Number(chosenAnswer) : null,
         previous: selectedOption.current
       });
+            setCurrentOptions(Questionnaire[questionIndex.current]?.options);
 
       await delay(500);
 
