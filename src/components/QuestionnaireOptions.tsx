@@ -83,29 +83,26 @@ function useAnimations() {
 }
 
 function useQuestionnaireState() {
-    const [URL] = useUrl();
+  const [URL] = useUrl();
 
-    const [questionIndex, setQuestionIndex] = useState<{
-        current: number;
-        previous: number;
-    }>({
-        current: Number(URL.queryParams.questionIndex),
-        previous: Number(URL.queryParams.questionIndex),
+  const [questionIndex, setQuestionIndex] = useState<CurrentPrevious<number>>({
+    current: Number(URL.queryParams.questionIndex),
+    previous: Number(URL.queryParams.questionIndex)
+  });
+
+  const [selectedOption, setSelectedOption] = useState<
+    CurrentPrevious<number | null>
+  >({
+    current: Number(URL.queryParams.answers[questionIndex.current]),
+    previous: null
+  });
+
+  const [currentOptions, setCurrentOptions] = useState<QuestionOption[]>(
+    Questionnaire[Number(URL.queryParams.questionIndex)].options
+  );
+
     });
 
-    const [selectedOption, setSelectedOption] = useState<{
-        current: number | null;
-        previous: number | null;
-    }>({
-        current: Number(URL.queryParams.answers[questionIndex.current]),
-        previous: null,
-    });
-
-    const [currentOptions, setCurrentOptions] = useState<QuestionOption[]>(
-        Questionnaire[Number(URL.queryParams.questionIndex)].options,
-    );
-
-    useEffect(() => {
         if (questionIndex.current === Number(URL.queryParams.questionIndex))
             return;
         setQuestionIndex({
