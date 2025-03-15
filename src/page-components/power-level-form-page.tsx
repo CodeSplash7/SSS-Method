@@ -1,8 +1,7 @@
 import QuestionnaireOptions from "@/components/QuestionnaireOptions";
 import ScaleDownFormAnimation from "@/components/ScaleDownFormAnimation";
-import parseUrl from "@/general-utils/parse-url";
 import { Question } from "@/types/QuestionnaireTypes";
-import { cookies, headers } from "next/headers";
+import { cookies } from "next/headers";
 
 export default async function PowerLevelFormPage({
 
@@ -115,7 +114,7 @@ function QuestionPrompt({
     ];
     const { statement, options } = Questionnaire[questionIndex];
     return (
-        <>
+        <div className="flex flex-col w-full h-full overflow-hidden items-center justify-start gap-[16px]">
             <div
                 id="question"
                 className="text-[#343a40] text-[22.5px] h-fit text-center font-bold mt-[12px]"
@@ -128,6 +127,6 @@ function QuestionPrompt({
                 {statement}
             </div>
             <QuestionnaireOptions options={options} isSameRoute={isSameRoute} />
-        </>
+        </div>
     );
 }
