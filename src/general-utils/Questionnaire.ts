@@ -52,7 +52,7 @@ const Questionnaire: [Question, Question, Question] = [
         ],
     },
     {
-        statement: "Choose your program preference",
+        statement: "Choose your program preference...",
         options: [
             {
                 answer: "Flexible cycle",
