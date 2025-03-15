@@ -31,7 +31,7 @@ export default async function PowerLevelFormPage({
 
                 <div
                     id="form-card"
-                    className="absolute z-[10] top-[75px] bg-white w-[375px] h-[450px] py-[18px] px-[36px] gap-[12px] flex flex-col items-center justify-start rounded-[15px] text-black text-[22.5px] font-bold"
+                    className="absolute overflow-hidden z-[10] top-[75px] bg-white w-[375px] h-[450px] py-[18px] px-[36px] gap-[12px] flex flex-col items-center justify-start rounded-[15px] text-black text-[22.5px] font-bold"
                 >
                     {/* Progress Bar * */}
                     <div
@@ -43,7 +43,7 @@ export default async function PowerLevelFormPage({
                             style={{
                                 width: `${(Number(searchParams.questionIndex) + 1) * 33.3333 * Number(isSameRoute)}%`,
                             }}
-                            className="min-h-[3px] h-full bg-[#d30c7b] flex items-center justify-center text-white font-bold"
+                            className="min-h-[3px] h-full bg-[#d30c7b] duration-[.6s] transition-width ease-in-out flex items-center justify-center text-white font-bold"
                         >
                             {Number(searchParams.questionIndex) + 1}/3
                         </div>
