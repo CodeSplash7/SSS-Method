@@ -23,35 +23,24 @@ export default function ExercisesPreview() {
         "1",
     ]);
     return (
-        <div
-            className={`w-full h-fit px-[8px] pt-[32px]
-                            flex flex-col justify-start items-start gap-[16px]`}
-        >
+        <div className="w-full h-fit flex flex-col gap-[4px] px-[16px] pt-[32px]">
             <Title />
-            <div
-                className={`w-full h-[400px] sm:h-[200px] flex flex-row items-start justify-start gap-[4px]`}
+            <Carousel
+                itemsGap={4}
+                itemHeight={400}
+                itemWidth={280}
+                itemsPerView={1}
+                options={{
+                    sm: { height: 164, width: 140, gap: 16, itemsPerView: 3 },
+                    lg: { itemsPerView: 4 },
+                }}
             >
-                <ExerciseSlideButton
-                    direction="left"
-                    offset={offset}
-                    setOffset={setOffset}
-                    requiresArrows={requiresArrows}
-                />
-                <div className="w-full overflow-hidden h-full">
-                    <ExerciseList
-                        exercises={exercises}
-                        offset={offset}
-                        cardListRef={cardListRef}
-                        cardSpace={cardSpace}
-                    />
-                </div>
-                <ExerciseSlideButton
-                    direction="right"
-                    offset={offset}
-                    setOffset={setOffset}
-                    requiresArrows={requiresArrows}
-                />
-            </div>
+                <SlideButton direction="left" />
+                {exercises.map((e) => (
+                    <ExerciseCard key={e} name={e} />
+                ))}
+                <SlideButton direction="right" />
+            </Carousel>
         </div>
     );
 }
@@ -65,34 +54,38 @@ type ExerciseCard = {
 
 const Title = () => (
     <div
-        className={`w-full h-fit ${montserrat.className} italic font-[500] text-[36px] sm:text-[28px] text-black`}
+        className={`w-full h-fit ${montserrat.className} italic font-[500] text-[36px] sm:text-[28px] text-black `}
     >
         Exercises you will do
     </div>
 );
 
-const ExerciseSlideButton = ({
-    direction,
-    offset,
-    setOffset,
-    requiresArrows,
-}: {
-    direction: "left" | "right";
-    offset: number;
-    setOffset: (newIndex: number) => void;
-    requiresArrows: boolean;
-}) => {
+const ExerciseCard = ({ name }: { name: string }) => {
+    return (
+        <div className={`h-full flex flex-col justify-start items-center`}>
+            <div
+                className={`w-full h-full flex flex-col items-center justify-center bg-black`}
+            ></div>
+            <div
+                className={`w-full h-[64px] sm:h-[32px] flex justify-center items-center bg-[#D30C7B]`}
+            >
+                <div
+                    className={`capitalize h-fit w-fit ${montserrat.className} font-[400] text-[30px] sm:text-[15px] text-white`}
+                >
+                    {name}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+function SlideButton({ direction }: { direction: "left" | "right" }) {
     return (
         <div
-            onClick={() =>
-                requiresArrows &&
-                setOffset(offset + (direction === "left" ? 1 : -1))
-            }
-            style={{ opacity: requiresArrows ? "1" : "0" }}
             className={`bg-[#D30C7B] border border-x-[2px] border-y-0 border-white relative z-[10]
                         w-fit h-[400px] gap-[8px] px-[4px]
                         flex flex-row items-center justify-center 
-                        sm:bg-white sm:border-[#D30C7B] sm:w-[32px] h-full`}
+                        sm:bg-white sm:border-[#D30C7B] sm:w-[32px] sm:h-full`}
         >
             <div
                 className={`flex w-[40px] h-[40px] p-[2px] items-center justify-center
@@ -116,58 +109,4 @@ const ExerciseSlideButton = ({
             </div>
         </div>
     );
-};
-
-const ExerciseCard = ({
-    rect,
-    name,
-    index,
-}: {
-    rect: { x: number; width: number };
-    name: string;
-    index: number;
-}) => {
-    return (
-        <div
-            style={{
-                transform: `translate(${rect.x}px, 0)`,
-                width: `${rect.width}px`,
-            }}
-            id={`exercise-card-${index}`}
-            className={`absolute top-0 left-[0px] min-w-full sm:min-w-fit h-full flex justify-center `}
-        >
-            <div
-                className={`w-[264px] sm:w-[132px] h-full flex flex-col justify-start items-center`}
-            >
-                <div
-                    className={`w-full h-full flex flex-col items-center justify-center bg-black`}
-                ></div>
-                <div
-                    className={`w-full h-[64px] sm:h-[32px] flex justify-center items-center bg-[#D30C7B]`}
-                >
-                    <div
-                        className={`capitalize h-fit w-fit ${montserrat.className} font-[400] text-[30px] sm:text-[15px] text-white`}
-                    >
-                        {name}
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-};
-
-export function useViewportWidth() {
-    const [width, setWidth] = useState<number | null>(null);
-
-    useEffect(() => {
-        const updateWidth = () => setWidth(window.innerWidth);
-
-        updateWidth();
-
-        window.addEventListener("resize", updateWidth);
-
-        return () => window.removeEventListener("resize", updateWidth);
-    }, []);
-
-    return width;
 }
