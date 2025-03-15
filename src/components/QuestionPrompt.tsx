@@ -17,7 +17,6 @@ export default function QuestionPrompt({
                 style={{
                     fontSize: `22.5px`,
                     marginTop: `12px`,
-                    opacity: `${Number(isSameRoute)}`,
                 }}
             >
                 <QuestionStatement />
