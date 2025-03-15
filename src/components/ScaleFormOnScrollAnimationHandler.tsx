@@ -1,15 +1,15 @@
 "use client";
 
 import {
-    scaleDownFormAnimation,
-    scaleUpFormAnimation,
+    condenseFormAnimation,
+    spreadOutFormAnimation,
 } from "@/animations/formScaleAnimation";
 import useUrl from "@/hooks/useUrl";
 import { useEffect, useRef, useState } from "react";
 
 const ScaleFormOnScrollAnimationHandler = () => {
     const [URL] = useUrl();
-    const [isScaledDown, setIsScaledDown] = useState(false);
+    const [isCondensed, setIsCondensed] = useState(true);
 
     useEffect(() => {
         if (isScaledDown === false) return;
