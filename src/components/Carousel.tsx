@@ -368,7 +368,7 @@ const CarouselList = ({
     ]);
 
     return (
-        <div className="w-full overflow-hidden h-full">
+        <div className="w-full h-full">
             <div
                 ref={itemListRef as RefObject<HTMLDivElement>}
                 className={`relative w-full h-full`}
