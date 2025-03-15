@@ -19,11 +19,12 @@ export default function NextQuestionButton({
         previous: number | null;
     };
 }) {
-    const [URL, setURL] = useUrl();
+    const [URL, _0, _1, goToUrl] = useUrl();
     const [isNextButtonHidden, setIsNextButtonHidden] = useState<boolean>(true);
     const [isLastQuestion, setIsLastQuestion] = useState<boolean>(
         Number(URL.queryParams.questionIndex) + 1 === Questionnaire.length,
     );
+    const [isAnimating, setIsAnimating] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -46,10 +47,13 @@ export default function NextQuestionButton({
     }, [isNextButtonHidden]);
 
     async function handleNext() {
+        if (isAnimating) return;
+        setIsAnimating(true);
+
         const newURL = { ...URL };
         let { answers, questionIndex } = { ...newURL.queryParams };
 
-        if (!answers[Number(questionIndex)])
+        if (!answers?.[Number(questionIndex)])
             answers += String(selectedOption.current);
         else
             answers = replaceCharAtIndex(
@@ -59,19 +63,24 @@ export default function NextQuestionButton({
             );
 
         questionIndex = String(Number(questionIndex) + 1);
-        newURL.queryParams = { ...newURL.queryParams, answers, questionIndex };
 
-        setURL(newURL);
+        goToUrl("power-level-form", {
+            answers,
+            questionIndex,
+        });
+        await delay(1000);
+        setIsAnimating(false);
     }
 
     async function handleFinish() {
+        if (isAnimating) return;
+        setIsAnimating(true);
+
         const newURL = { ...URL };
         let { answers } = { ...newURL.queryParams };
         answers += String(selectedOption.current);
 
-        newURL.queryParams = {};
-        newURL.route = "assessment";
-        setURL(newURL);
+        goToUrl("assessment", { answers, questionIndex: null, redirect: null });
     }
 
     return (
