@@ -14,7 +14,6 @@ const montserrat = Montserrat({
 // clicking a card makes it do rotating animation, revelaing the information of the exercises on the back of the card
 
 export default function ExercisesPreview() {
-    const [offset, setOffset] = useState(0);
     const [exercises] = useState([
         "dips",
         "pullups",
@@ -22,33 +21,7 @@ export default function ExercisesPreview() {
         "planche",
         "front-lever",
         "1",
-        "2",
-        // "3",
-        // "4",
-        // "5",
-        // "6",
     ]);
-    const [cardSpace, setCardSpace] = useState<number>(0);
-    const [requiresArrows, setRequiresArrows] = useState<boolean>(false);
-    const viewportWidth = useViewportWidth();
-
-    const cardListRef = useRef<HTMLDivElement>(null); // Move ref here
-    useEffect(() => {
-        if (!cardListRef.current) return;
-        const isSmallScreen = (viewportWidth || 9999) < 640;
-
-        let gap = 16;
-        let width = 132;
-        const availableSpace =
-            cardListRef.current.getBoundingClientRect().width;
-        if (isSmallScreen) {
-            width *= 2;
-            gap = availableSpace - width;
-        }
-        setCardSpace(gap + width);
-        setRequiresArrows((gap + width) * exercises.length > availableSpace);
-    }, [cardListRef]);
-
     return (
         <div
             className={`w-full h-fit px-[8px] pt-[32px]
