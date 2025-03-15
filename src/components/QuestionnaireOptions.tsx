@@ -44,17 +44,16 @@ function useAnimations() {
     setHasChangedQuestion(true);
   }, [URL.queryParams.questionIndex]);
 
-  async function runSelectAnimation(
-    selectedOption: {
-      current: number | null;
-      previous: number | null;
-    },
-    inBetweenCallback?: () => void
-  ) {
-    if (isAnimating) return;
-
-    setIsAnimating(true);
-    setHasChangedQuestion(false);
+    async function runSelectAnimation(
+        selectedOption: {
+            current: number | null;
+            previous: number | null;
+        },
+        inBetweenCallback?: () => void,
+    ) {
+        if (isAnimating) return;
+        setIsAnimating(true);
+        setHasChangedQuestion(false);
 
     // conditions
     const hasSelected = selectedOption.current !== null;
@@ -85,17 +84,18 @@ function useAnimations() {
 function useQuestionnaireState() {
   const [URL] = useUrl();
 
-  const [questionIndex, setQuestionIndex] = useState<CurrentPrevious<number>>({
-    current: Number(URL.queryParams.questionIndex),
-    previous: Number(URL.queryParams.questionIndex)
-  });
-
-  const [selectedOption, setSelectedOption] = useState<
-    CurrentPrevious<number | null>
-  >({
-    current: Number(URL.queryParams.answers[questionIndex.current]),
-    previous: null
-  });
+    const [questionIndex, setQuestionIndex] = useState<CurrentPrevious<number>>(
+        {
+            current: Number(URL.queryParams.questionIndex),
+            previous: Number(URL.queryParams.questionIndex),
+        },
+    );
+    const [selectedOption, setSelectedOption] = useState<
+        CurrentPrevious<number | null>
+    >({
+        current: Number(URL.queryParams.answers[questionIndex.current]) || null,
+        previous: null,
+    });
 
   const [currentOptions, setCurrentOptions] = useState<QuestionOption[]>(
     Questionnaire[Number(URL.queryParams.questionIndex)].options
