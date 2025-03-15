@@ -19,7 +19,14 @@ import NextQuestionButton from "./NextQuestionButton";
 
 
 function useAnimations() {
+    const [URL] = useUrl();
+
     const [isAnimating, setIsAnimating] = useState(false);
+    const [hasChangedQuestion, setHasChangedQuestion] = useState(false);
+
+    useEffect(() => {
+        setHasChangedQuestion(true);
+    }, [URL.queryParams.questionIndex]);
 
     async function runSelectAnimation(
         selectedOption: {
@@ -30,13 +37,14 @@ function useAnimations() {
     ) {
         if (isAnimating) return;
         setIsAnimating(true);
+        setHasChangedQuestion(false);
 
         const hasSelected = selectedOption.current !== null;
         const hasChangedSelection =
             selectedOption.current !== selectedOption.previous &&
             selectedOption.previous !== null;
 
-        if (hasSelected && !hasChangedSelection) {
+        if (hasSelected && (!hasChangedSelection || hasChangedQuestion)) {
             await handleSelectAnimation(selectedOption.current!);
         }
 
