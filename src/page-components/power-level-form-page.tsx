@@ -38,10 +38,7 @@ export default async function PowerLevelFormPage({
                     <ProgressBar
                         questionIndex={Number(searchParams.questionIndex)}
                     />
-                    <QuestionPrompt
-                        isSameRoute={isSameRoute}
-                        questionIndex={Number(searchParams.questionIndex)}
-                    />
+                    <QuestionPrompt isSameRoute={isSameRoute} />
                 </div>
             </div>
         </div>
@@ -67,14 +64,7 @@ function ProgressBar({ questionIndex }: { questionIndex: number }) {
     );
 }
 
-function QuestionPrompt({
-    questionIndex,
-    isSameRoute,
-}: {
-    questionIndex: number;
-    isSameRoute: boolean;
-}) {
-    const { statement, options } = Questionnaire[questionIndex];
+function QuestionPrompt({ isSameRoute }: { isSameRoute: boolean }) {
     return (
         <div
             id="form-content"
