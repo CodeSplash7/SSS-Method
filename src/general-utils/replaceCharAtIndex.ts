@@ -3,8 +3,6 @@ export default function replaceCharAtIndex(
   index: number,
   replacement: string,
 ): string {
-  console.log(mainString, index, replacement);
-
   if (index < 0 || index >= mainString.length) {
     throw new Error("Index is out of bounds.");
   }
