@@ -114,7 +114,10 @@ function QuestionPrompt({
     ];
     const { statement, options } = Questionnaire[questionIndex];
     return (
-        <div className="flex flex-col w-full h-full overflow-hidden items-center justify-start gap-[16px]">
+        <div
+            id="form-content"
+            className="relative translate-x-[0%] flex flex-col w-full h-full overflow-hidden items-center justify-start gap-[16px]"
+        >
             <div
                 id="question"
                 className="text-[#343a40] text-[22.5px] h-fit text-center font-bold mt-[12px]"
