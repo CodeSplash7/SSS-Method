@@ -81,7 +81,7 @@ function QuestionPrompt({
         >
             <div
                 id="question"
-                className="text-[#343a40] text-[22.5px] h-fit text-center font-bold mt-[12px]"
+                className="text-[#343a40] text-[22.5px] h-fit flex justify-center gap-[16px] font-bold mt-[12px]"
                 style={{
                     fontSize: `22.5px`,
                     marginTop: `12px`,
