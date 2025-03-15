@@ -13,7 +13,7 @@ import { redirect } from "next/navigation";
  *
  * @export
  * @async
- * @returns {React.ReactNode}
+ * @returns {Promise<JSX.Element>}
  */
 export default async function DashboardPage() {
   const user = await currentUser();
