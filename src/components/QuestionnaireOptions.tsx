@@ -13,6 +13,11 @@ import {
   hideNextQuestionButton,
   showNextQuestionButton
 } from "@/animations/nextQuestionButtonAnimation";
+import {
+  slideOut as slideOutForm,
+  slideIn as slideInForm
+} from "@/animations/formContentSlideAnimation";
+import delay from "@/general-utils/delay";
 
 export default function QuestionnaireOptions({
   isSameRoute,
@@ -40,22 +45,37 @@ export default function QuestionnaireOptions({
     }
   }, [selectedOption]);
 
-  // NEXT: handle the button which should slide nicely and direct the user to the new question
+  async function handleQuestionSlide(newURL: typeof URL) {
+    setIsAnimating(true);
+    await slideOutForm();
 
-  // function nextQuestion() {
-  //     const newURL = { ...URL };
+    setURL(newURL);
+    setIsNextButtonHidden(true);
+    setSelectedOption(null);
+    handleDeselectAnimation(selectedOption!);
 
-  //     newURL.queryParams.answers += String(selectedOption);
+    await delay(500);
+    await slideInForm();
+    setIsAnimating(false);
+  }
 
-  //     setURL(newURL);
-  // }
+  async function gotoNextQuestion() {
+    const newURL = { ...URL };
+
+    newURL.queryParams.answers += String(selectedOption);
+    newURL.queryParams.questionIndex = String(
+      Number(newURL.queryParams.questionIndex) + 1
+    );
+
+    handleQuestionSlide(newURL);
+  }
 
   return (
     <>
       <div
         id="options"
         style={{ opacity: `${Number(isSameRoute)}` }}
-        className="z-[10] flex flex-col justify-start gap-[8px] flex-1 w-[95%] text-[0.9rem] mt-[40px] overflow-y-scroll"
+        className="z-[10] flex flex-col justify-start gap-[8px] w-[95%] text-[0.9rem] mt-[40px] overflow-y-scroll"
       >
         {options.map((option, index) => (
           <QuestionnaireOption
@@ -89,8 +109,9 @@ export default function QuestionnaireOptions({
       </div>
 
       <div
+        onClick={gotoNextQuestion}
         id="next-button"
-        className="text-[20px] bg-[#d30c7b] w-full basis-[80px] overflow-hidden flex items-center justify-center text-white rounded"
+        className="hover:bg-white hover:text-[#d30c7b] hover:border-[#d30c7b] transition duration-150 border-[1px] border-white text-[20px] bg-[#d30c7b] w-full h-[0px] overflow-hidden flex items-center justify-center text-white rounded"
       >
         Next Question
       </div>
@@ -111,15 +132,17 @@ function QuestionnaireOption({
   option: QuestionOption;
   optionIndex: number;
 }) {
+  const [URL, setURL] = useUrl();
+
   return (
     <div
+      id={`option${optionIndex}`}
       onClick={async () => {
         if (isAnimating) return;
         setIsAnimating(true);
         await onSelect();
         setIsAnimating(false);
       }}
-      id={`option${optionIndex}`}
       data-index={String(optionIndex)}
       className="option relative font-[400] overflow-hidden text-[#062f33] hover:bg-white bg-[#e9ecef] border border-[2px] transition duration-150 hover:border-[#1cbac8] border-transparent rounded-[6px] min-h-fit flex justify-between items-center px-[9px] py-[10px]"
     >
