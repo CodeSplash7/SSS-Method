@@ -7,7 +7,7 @@ import {
 import useUrl from "@/hooks/useUrl";
 import { useEffect, useRef, useState } from "react";
 
-const ScaleDownFormOnScrollAnimation = () => {
+const ScaleFormOnScrollAnimationHandler = () => {
     const [URL] = useUrl();
     const [isScaledDown, setIsScaledDown] = useState(false);
 
@@ -32,4 +32,4 @@ const ScaleDownFormOnScrollAnimation = () => {
     }, []);
     return <></>;
 };
-export default ScaleDownFormOnScrollAnimation;
+export default ScaleFormOnScrollAnimationHandler;
