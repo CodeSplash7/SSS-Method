@@ -47,46 +47,21 @@ export default function PreviousQuestionButton() {
         })();
     }, [URL.toString()]);
 
-    // useEffect(() => {
-    //     (async () => {
-    //         if (isAnimating) return;
-    //         console.log("s");
-    //         if (isVisible) await handleShowAnimation();
-    //         else await handleHideAnimation();
+    async function handleClick() {
+        const newURL = { ...URL };
+        if (!isVisible || isAnimating) return;
 
-    //         setIsAnimating(false);
-    //     })();
-    // }, [isVisible]);
-
-    // NO IDEA what the problame here was but i count on future YOU
-
-    function handleClick() {
-        (async () => {
-            const newURL = { ...URL };
-            if (!isVisible || isAnimating) return;
-
-            // const newQuestionIndex =
-            //     Number(newURL.queryParams.questionIndex) - 1;
-            // setIsVisible(!!newQuestionIndex);
-
-            // setIsAnimating(true);
-            // if (newQuestionIndex) handleHideAnimation();
-            // else handleShowAnimation();
-
-            // setIsAnimating(false);
-
-            newURL.queryParams.questionIndex = String(
-                Number(newURL.queryParams.questionIndex) - 1,
-            );
-            setURL(newURL);
-        })();
+        newURL.queryParams.questionIndex = String(
+            Number(newURL.queryParams.questionIndex) - 1,
+        );
+        setURL(newURL);
     }
 
     return (
         <div
+            onClick={handleClick}
             style={{ opacity: currentOpacity }}
             id="previous-question-button"
-            onClick={handleClick}
             className="w-[1px] w-[20px] flex items-center justify-center h-[20px] bg-black rounded-[40%]"
         >
             <svg
