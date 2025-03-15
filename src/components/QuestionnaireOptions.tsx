@@ -1,8 +1,13 @@
 "use client";
 
+// types
 import { QuestionOption } from "@/types/QuestionnaireTypes";
+
+// hooks
 import useUrl from "@/hooks/useUrl";
 import { useEffect, useState } from "react";
+
+// animations
 import {
   handleDeselectAnimation,
   handlePartialDeselectAnimation,
@@ -10,56 +15,55 @@ import {
   handleSelectAnimation
 } from "@/animations/optionsAnimations";
 import {
-    slideOut as slideOutForm,
-    slideIn as slideInForm,
+  slideOut as slideOutForm,
+  slideIn as slideInForm
 } from "@/animations/formContentSlideAnimation";
-import delay from "@/general-utils/delay";
-import Questionnaire from "@/general-utils/Questionnaire";
-import NextQuestionButton from "./NextQuestionButton";
 
+// utils
+import delay from "@/general-utils/delay";
+
+// data
+import Questionnaire from "@/general-utils/Questionnaire";
+
+// components
+import NextQuestionButton from "./NextQuestionButton";
+import QuestionnaireOption from "./QuestionnaireOption";
+
+type CurrentPrevious<T> = {
+  current: T;
+  previous: T;
+};
 
 function useAnimations() {
-    const [URL] = useUrl();
+  const [URL] = useUrl();
 
-    const [isAnimating, setIsAnimating] = useState(false);
-    const [hasChangedQuestion, setHasChangedQuestion] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [hasChangedQuestion, setHasChangedQuestion] = useState(false);
 
-    useEffect(() => {
-        setHasChangedQuestion(true);
-    }, [URL.queryParams.questionIndex]);
+  useEffect(() => {
+    setHasChangedQuestion(true);
+  }, [URL.queryParams.questionIndex]);
 
-    async function runSelectAnimation(
-        selectedOption: {
-            current: number | null;
-            previous: number | null;
-        },
-        inBetweenCallback?: () => void,
-    ) {
-        if (isAnimating) return;
-        setIsAnimating(true);
-        setHasChangedQuestion(false);
+  async function runSelectAnimation(
+    selectedOption: {
+      current: number | null;
+      previous: number | null;
+    },
+    inBetweenCallback?: () => void
+  ) {
+    if (isAnimating) return;
 
-        const hasSelected = selectedOption.current !== null;
-        const hasChangedSelection =
-            selectedOption.current !== selectedOption.previous &&
-            selectedOption.previous !== null;
+    setIsAnimating(true);
+    setHasChangedQuestion(false);
 
-        if (hasSelected && (!hasChangedSelection || hasChangedQuestion)) {
-            await handleSelectAnimation(selectedOption.current!);
-        }
+    // conditions
+    const hasSelected = selectedOption.current !== null;
+    const hasChangedSelection =
+      selectedOption.current !== selectedOption.previous &&
+      selectedOption.previous !== null;
 
-        if (hasSelected && hasChangedSelection) {
-            await handlePartialSelectAnimation(selectedOption.current!);
-            await handlePartialDeselectAnimation(selectedOption.previous!);
-        }
-        if (!hasSelected && hasChangedSelection) {
-            await handleDeselectAnimation(selectedOption.previous!);
-        }
-
-        inBetweenCallback?.();
-
-        await delay(500);
-        setIsAnimating(false);
+    if (hasSelected && (!hasChangedSelection || hasChangedQuestion)) {
+      await handleSelectAnimation(selectedOption.current!);
     }
     return { runSelectAnimation, isAnimating };
 }
