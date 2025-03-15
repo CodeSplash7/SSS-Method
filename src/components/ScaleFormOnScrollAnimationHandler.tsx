@@ -1,9 +1,11 @@
 "use client";
 
+// animations
 import {
     condenseFormAnimation,
     spreadOutFormAnimation,
 } from "@/animations/formScaleAnimation";
+// hooks
 import useUrl from "@/hooks/useUrl";
 import { useEffect, useState } from "react";
 
@@ -22,7 +24,6 @@ const ScaleFormOnScrollAnimationHandler = () => {
 
         const handleScroll = () => {
             spreadOutFormAnimation();
-
             setIsCondensed(false);
             options.removeEventListener("scroll", handleScroll);
         };
@@ -31,21 +32,7 @@ const ScaleFormOnScrollAnimationHandler = () => {
 
         return () => options.removeEventListener("scroll", handleScroll);
     }, [URL.queryParams.questionIndex]);
-    // useEffect(() => {
-    //     const options = document.getElementById("options");
-    //     if (!options) return;
 
-    //     const handleScroll = () => {
-    //         condenseFormAnimation();
-
-    //         setIsCondensed(true);
-    //         options.removeEventListener("scroll", handleScroll);
-    //     };
-
-    //     options.addEventListener("scroll", handleScroll);
-
-    //     return () => options.removeEventListener("scroll", handleScroll);
-    // }, []);
     return <></>;
 };
 export default ScaleFormOnScrollAnimationHandler;

@@ -1,8 +1,9 @@
-import PreviousQuestionButton from "@/components/PreviousQuestionButton";
-import QuestionnaireOptions from "@/components/QuestionnaireOptions";
-import QuestionStatement from "@/components/QuestionStatement";
+// components
+import ProgressBar from "@/components/ProgressBar";
+import QuestionPrompt from "@/components/QuestionPrompt";
+// animation handlers
 import ScaleFormOnScrollAnimationHandler from "@/components/ScaleFormOnScrollAnimationHandler";
-import Questionnaire from "@/general-utils/Questionnaire";
+// hooks
 import { cookies } from "next/headers";
 
 export default async function PowerLevelFormPage({

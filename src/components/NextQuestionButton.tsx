@@ -1,10 +1,13 @@
+// hooks
 import { useState, useEffect } from "react";
+import useUrl from "@/hooks/useUrl";
+// animations
 import {
     hideNextQuestionButton,
     showNextQuestionButton,
 } from "@/animations/nextQuestionButtonAnimation";
+// utils
 import replaceCharAtIndex from "@/general-utils/replaceCharAtIndex";
-import useUrl from "@/hooks/useUrl";
 
 export default function NextQuestionButton({
     selectedOption,
