@@ -21,6 +21,7 @@ import delay from "@/general-utils/delay";
 import replaceCharAtIndex from "@/general-utils/replaceCharAtIndex";
 import Questionnaire from "@/general-utils/Questionnaire";
 
+
 function useAnimations() {
     const [isAnimating, setIsAnimating] = useState(false);
 
@@ -101,7 +102,6 @@ function useQuestionnaireState() {
 }
 
 export default function QuestionnaireOptions({
-
     isSameRoute,
 }: {
     isSameRoute: boolean;
@@ -173,7 +173,6 @@ export default function QuestionnaireOptions({
                     />
                 ))}
             </div>
-
             <NextQuestionButton selectedOption={selectedOption} />
         </>
     );
