@@ -51,6 +51,9 @@ function ProgressBar({ questionIndex }: { questionIndex: number }) {
             id="progress-bar"
             className="w-full h-[12px] bg-[#e7e5e5] rounded-[3px] text-[7.5px]"
         >
+            <div className="absolute w-fit h-fit left-[10px] top-[14px]">
+                <PreviousQuestionButton />
+            </div>
             <div
                 id="progress-fill"
                 style={{
