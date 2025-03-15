@@ -3,6 +3,54 @@ import ScaleFormOnScrollAnimationHandler from "@/components/ScaleFormOnScrollAni
 import { Question } from "@/types/QuestionnaireTypes";
 import { cookies } from "next/headers";
 
+const Questionnaire: Question[] = [
+    {
+        statement: "What is your level at pullups?",
+        options: [
+            { answer: "Beginner", detail: "0 pullups", emoji: "🔧" },
+            { answer: "Intermediate", detail: "1-15 pullups", emoji: "🔨" },
+            { answer: "Advanced", detail: "15+ pullups", emoji: "⚒️" },
+            {
+                answer: "Master",
+                detail: "(20kg+) x 8 Pullups",
+                emoji: "⚔️",
+            },
+        ],
+    },
+    {
+        statement: "What is your level at dips?",
+        options: [
+            { answer: "Beginner", detail: "0 dips", emoji: "🔧" },
+            {
+                answer: "Intermediate",
+                detail: "1-20m dips",
+                emoji: "🔨",
+            },
+            { answer: "Advanced", detail: "20+ dips", emoji: "⚒️" },
+            {
+                answer: "Master",
+                detail: "(40kg+) x 8 dips",
+                emoji: "⚔️",
+            },
+        ],
+    },
+    {
+        statement: "Choose your program for now",
+        options: [
+            {
+                answer: "4-day cycle",
+                detail: "Most efficient",
+                emoji: "⚡",
+            },
+            {
+                answer: "Weekly",
+                detail: "Most accesible",
+                emoji: "🔑",
+            },
+        ],
+    },
+];
+
 export default async function PowerLevelFormPage({
 
     searchParams,
@@ -65,53 +113,6 @@ function QuestionPrompt({
     questionIndex: number;
     isSameRoute: boolean;
 }) {
-    const Questionnaire: Question[] = [
-        {
-            statement: "What is your level at pullups?",
-            options: [
-                { answer: "Beginner", detail: "0 pullups", emoji: "🔧" },
-                { answer: "Intermediate", detail: "1-15 pullups", emoji: "🔨" },
-                { answer: "Advanced", detail: "15+ pullups", emoji: "⚒️" },
-                {
-                    answer: "Master",
-                    detail: "(20kg+) x 8 Pullups",
-                    emoji: "⚔️",
-                },
-            ],
-        },
-        {
-            statement: "What is your level at dips?",
-            options: [
-                { answer: "Beginner", detail: "0 dips", emoji: "🔧" },
-                {
-                    answer: "Intermediate",
-                    detail: "1-20m dips",
-                    emoji: "🔨",
-                },
-                { answer: "Advanced", detail: "20+ dips", emoji: "⚒️" },
-                {
-                    answer: "Master",
-                    detail: "(40kg+) x 8 dips",
-                    emoji: "⚔️",
-                },
-            ],
-        },
-        {
-            statement: "Choose your program for now",
-            options: [
-                {
-                    answer: "4-day cycle",
-                    detail: "Most efficient",
-                    emoji: "⚡",
-                },
-                {
-                    answer: "Weekly",
-                    detail: "Most accesible",
-                    emoji: "🔑",
-                },
-            ],
-        },
-    ];
     const { statement, options } = Questionnaire[questionIndex];
     return (
         <div
