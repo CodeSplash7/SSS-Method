@@ -65,7 +65,21 @@ function useAnimations() {
     if (hasSelected && (!hasChangedSelection || hasChangedQuestion)) {
       await handleSelectAnimation(selectedOption.current!);
     }
-    return { runSelectAnimation, isAnimating };
+
+    if (hasSelected && hasChangedSelection) {
+      await handlePartialSelectAnimation(selectedOption.current!);
+      await handlePartialDeselectAnimation(selectedOption.previous!);
+    }
+    if (!hasSelected && hasChangedSelection) {
+      await handleDeselectAnimation(selectedOption.previous!);
+    }
+
+    inBetweenCallback?.();
+
+    await delay(500);
+    setIsAnimating(false);
+  }
+  return { runSelectAnimation, isAnimating };
 }
 
 function useQuestionnaireState() {
