@@ -1,5 +1,6 @@
 import PreviousQuestionButton from "@/components/PreviousQuestionButton";
 import QuestionnaireOptions from "@/components/QuestionnaireOptions";
+import QuestionStatement from "@/components/QuestionStatement";
 import ScaleFormOnScrollAnimationHandler from "@/components/ScaleFormOnScrollAnimationHandler";
 import Questionnaire from "@/general-utils/Questionnaire";
 import { cookies } from "next/headers";
@@ -88,8 +89,8 @@ function QuestionPrompt({
                     opacity: `${Number(isSameRoute)}`,
                 }}
             >
-                <PreviousQuestionButton />
-                {statement}
+                {/*<PreviousQuestionButton />*/}
+                <QuestionStatement />
             </div>
             <QuestionnaireOptions isSameRoute={isSameRoute} />
         </div>
