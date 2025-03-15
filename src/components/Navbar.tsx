@@ -6,15 +6,17 @@ import {
   SignedOut,
   SignInButton,
   SignUpButton,
-  UserButton
+  UserButton,
 } from "@clerk/nextjs";
 
 export default function Navbar() {
   return (
     <div
-      className={`bg-[#111111] w-full h-[76px] px-[48px] flex flex-row justify-start items-center gap-[32px] `}
+      className={`bg-gradient-to-r from-[#89E2E8] from-[24%] to-[#E392B7] to-[76%]
+                  flex justify-start items-center flex-col
+                  w-full h-[40px] px-[64px]`}
     >
-      <SignedOut>
+      {/*<SignedOut>
         <SignInButton>
           <div
             className={` hover:text-[#1cbac8] transition duration-150 text-[24px] sm:text-[13px] text-white font-bold ${font_roboto_700}`}
@@ -32,7 +34,7 @@ export default function Navbar() {
       </SignedOut>
       <SignedIn>
         <UserButton />
-      </SignedIn>
+      </SignedIn>*/}
     </div>
   );
 }
