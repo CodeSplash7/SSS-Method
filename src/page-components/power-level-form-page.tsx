@@ -88,6 +88,7 @@ function QuestionPrompt({
                     opacity: `${Number(isSameRoute)}`,
                 }}
             >
+                <PreviousQuestionButton />
                 {statement}
             </div>
             <QuestionnaireOptions isSameRoute={isSameRoute} />
