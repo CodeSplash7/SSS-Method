@@ -18,134 +18,182 @@ import {
     slideIn as slideInForm,
 } from "@/animations/formContentSlideAnimation";
 import delay from "@/general-utils/delay";
+import replaceCharAtIndex from "@/general-utils/replaceCharAtIndex";
+import Questionnaire from "@/general-utils/Questionnaire";
 
-export default function QuestionnaireOptions({
-  isSameRoute,
-  options
-}: {
-  isSameRoute: boolean;
-  options: QuestionOption[];
-}) {
-  // hooks
-  const [URL, setURL] = useUrl();
+function useAnimations() {
+    const [isAnimating, setIsAnimating] = useState(false);
 
-  // state
-  const [isAnimating, setIsAnimating] = useState<boolean>(false);
-  const [selectedOption, setSelectedOption] = useState<number | null>(null);
-  const [isNextButtonHidden, setIsNextButtonHidden] = useState<boolean>(true);
-
-  useEffect(() => {
-    if (selectedOption !== null && isNextButtonHidden) {
-      showNextQuestionButton();
-      setIsNextButtonHidden(false);
-    }
-    if (selectedOption === null) {
-      hideNextQuestionButton();
-      setIsNextButtonHidden(true);
-    }
-  }, [selectedOption]);
-
-
-    async function handleQuestionSlide(newURL: typeof URL) {
+    async function runSelectAnimation(
+        selectedOption: {
+            current: number | null;
+            previous: number | null;
+        },
+        // hasChangedQuestion: boolean,
+        inBetweenCallback?: () => void,
+    ) {
+        if (isAnimating) return;
         setIsAnimating(true);
-        await slideOutForm();
 
-        setURL(newURL);
-        setIsNextButtonHidden(true);
-        setSelectedOption(null);
-        handleDeselectAnimation(selectedOption!);
+        const hasSelected = selectedOption.current !== null;
+        const hasChangedSelection =
+            selectedOption.current !== selectedOption.previous &&
+            selectedOption.previous !== null;
+
+        if (hasSelected && !hasChangedSelection) {
+            await handleSelectAnimation(selectedOption.current!);
+        }
+
+        if (hasSelected && hasChangedSelection) {
+            await handlePartialSelectAnimation(selectedOption.current!);
+            await handlePartialDeselectAnimation(selectedOption.previous!);
+        }
+        if (!hasSelected && hasChangedSelection) {
+            await handleDeselectAnimation(selectedOption.previous!);
+        }
+
+        inBetweenCallback?.();
 
         await delay(500);
-        await slideInForm();
         setIsAnimating(false);
     }
+    return { runSelectAnimation, isAnimating };
+}
 
-    async function gotoNextQuestion() {
-        const newURL = { ...URL };
+function useQuestionnaireState() {
+    const [URL] = useUrl();
 
-        newURL.queryParams.answers += String(selectedOption);
-        newURL.queryParams.questionIndex = String(
-            Number(newURL.queryParams.questionIndex) + 1,
+    const [questionIndex, setQuestionIndex] = useState<{
+        current: number;
+        previous: number;
+    }>({
+        current: Number(URL.queryParams.questionIndex),
+        previous: Number(URL.queryParams.questionIndex),
+    });
+
+    const [selectedOption, setSelectedOption] = useState<{
+        current: number | null;
+        previous: number | null;
+    }>({
+        current: Number(URL.queryParams.answers[questionIndex.current]),
+        // current: Questionnaire[questionIndex.current].options[],
+        previous: null,
+    });
+
+    const [currentOptions, setCurrentOptions] = useState<QuestionOption[]>(
+        Questionnaire[Number(URL.queryParams.questionIndex)].options,
+    );
+
+    useEffect(() => {
+        if (questionIndex.current === Number(URL.queryParams.questionIndex))
+            return;
+        setQuestionIndex({
+            current: Number(URL.queryParams.questionIndex),
+            previous: questionIndex.current,
+        });
+    }, [URL.queryParams.questionIndex]);
+
+    return [
+        [selectedOption, setSelectedOption],
+        [currentOptions, setCurrentOptions],
+        questionIndex,
+    ] as const;
+}
+
+export default function QuestionnaireOptions({
+
+    isSameRoute,
+}: {
+    isSameRoute: boolean;
+}) {
+    // hooks
+    const [URL] = useUrl();
+    const { runSelectAnimation, isAnimating } = useAnimations();
+
+    // state
+    const [
+        [selectedOption, setSelectedOption],
+        [currentOptions, setCurrentOptions],
+        questionIndex,
+    ] = useQuestionnaireState();
+
+    useEffect(() => {
+        const chosenAnswer = URL.queryParams.answers[questionIndex.current];
+
+        const hasAnswered = !!chosenAnswer;
+
+        (async () => {
+            const hasWentBack = questionIndex.current < questionIndex.previous;
+            const hasChangedQuestion =
+                questionIndex.current !== questionIndex.previous;
+
+            if (hasChangedQuestion)
+                await slideOutForm(hasWentBack ? "right" : "left");
+            setCurrentOptions(Questionnaire[questionIndex.current].options);
+            setSelectedOption({
+                current: hasAnswered ? Number(chosenAnswer) : null,
+                previous: selectedOption.current,
+            });
+
+            await delay(500);
+
+            if (hasChangedQuestion) slideInForm(hasWentBack ? "left" : "right");
+        })();
+    }, [questionIndex]);
+
+    // handle options click animations
+    useEffect(() => {
+        runSelectAnimation(
+            selectedOption,
+            // questionIndex.current !== Number(URL.queryParams.questionIndex),
         );
-
-        handleQuestionSlide(newURL);
-    }
+    }, [selectedOption]);
 
     return (
         <>
             <div
-                id="options"
                 style={{ opacity: `${Number(isSameRoute)}` }}
                 className="z-[10] flex flex-col justify-start gap-[8px] w-[95%] text-[0.9rem] mt-[40px] overflow-y-scroll"
             >
-                {options.map((option, index) => (
+                {currentOptions.map((option, index) => (
                     <QuestionnaireOption
-                        onSelect={async () => {
-                            if (selectedOption === null) {
-                                setSelectedOption(index);
-                                return await handleSelectAnimation(index);
-                            }
-                            if (selectedOption === index) {
-                                setSelectedOption(null);
-                                return await handleDeselectAnimation(index);
-                            }
-                            if (
-                                typeof selectedOption === "number" &&
-                                selectedOption !== index
-                            ) {
-                                setSelectedOption(index);
-                                return (async () => {
-                                    handlePartialSelectAnimation(index);
-                                    handlePartialDeselectAnimation(
-                                        selectedOption,
-                                    );
-                                })();
-                            }
-                        }}
-                        isAnimating={isAnimating}
-                        setIsAnimating={setIsAnimating}
                         key={index}
+                        onSelect={async () => {
+                            if (isAnimating) return;
+                            setSelectedOption({
+                                current:
+                                    selectedOption.current === index
+                                        ? null
+                                        : index,
+                                previous: selectedOption.current,
+                            });
+                        }}
                         option={option}
                         optionIndex={index}
                     />
                 ))}
             </div>
 
-            <div
-                onClick={gotoNextQuestion}
-                id="next-button"
-                className="hover:bg-white hover:text-[#d30c7b] hover:border-[#d30c7b] transition duration-150 border-[1px] border-white text-[20px] bg-[#d30c7b] w-full h-[0px] overflow-hidden flex items-center justify-center text-white rounded"
-            >
-                Next Question
-            </div>
+            <NextQuestionButton selectedOption={selectedOption} />
         </>
     );
 }
 
 function QuestionnaireOption({
-  onSelect,
-  isAnimating,
-  setIsAnimating,
-  option,
-  optionIndex
+
+    onSelect,
+    option,
+    optionIndex,
 }: {
-  onSelect: () => Promise<void>;
-  isAnimating: boolean;
-  setIsAnimating: (state: boolean) => void;
-  option: QuestionOption;
-  optionIndex: number;
+    onSelect: () => Promise<void>;
+    option: QuestionOption;
+    optionIndex: number;
 }) {
-
-    const [URL, setURL] = useUrl();
-
     return (
         <div
             id={`option${optionIndex}`}
             onClick={async () => {
-                if (isAnimating) return;
-                setIsAnimating(true);
                 await onSelect();
-                setIsAnimating(false);
             }}
             data-index={String(optionIndex)}
             className="option relative font-[400] overflow-hidden text-[#062f33] hover:bg-white bg-[#e9ecef] border border-[2px] transition duration-150 hover:border-[#1cbac8] border-transparent rounded-[6px] min-h-fit flex justify-between items-center px-[9px] py-[10px]"
@@ -164,5 +212,62 @@ function QuestionnaireOption({
                 {option.detail}
             </div>
         </div>
+    );
+}
+
+function NextQuestionButton({
+    selectedOption,
+}: {
+    selectedOption: {
+        current: number | null;
+        previous: number | null;
+    };
+}) {
+    const [URL, setURL] = useUrl();
+    const [isNextButtonHidden, setIsNextButtonHidden] = useState<boolean>(true);
+
+    useEffect(() => {
+        const hasSelected = selectedOption.current !== null;
+        setIsNextButtonHidden(!hasSelected);
+    }, [selectedOption]);
+
+    useEffect(() => {
+        if (isNextButtonHidden) hideNextQuestionButton();
+        else showNextQuestionButton();
+    }, [isNextButtonHidden]);
+
+    async function handleNext() {
+        const newURL = { ...URL };
+        let { answers, questionIndex } = { ...newURL.queryParams };
+
+        if (!answers[Number(questionIndex)])
+            answers += String(selectedOption.current);
+        else
+            answers = replaceCharAtIndex(
+                answers,
+                Number(questionIndex),
+                String(selectedOption.current),
+            );
+
+        questionIndex = String(Number(questionIndex) + 1);
+        newURL.queryParams = { ...newURL.queryParams, answers, questionIndex };
+
+        setURL(newURL);
+    }
+
+    return (
+        <>
+            <div
+                id="next-button-space-filler"
+                className=" w-full h-[0px] opacity-0"
+            ></div>
+            <div
+                onClick={handleNext}
+                id="next-button"
+                className="absolute -bottom-[60px] hover:bg-white hover:text-[#d30c7b] hover:border-[#d30c7b] transition duration-150 border-[1px] border-white text-[20px] bg-[#d30c7b] w-full h-[60px] overflow-hidden flex items-center justify-center text-white rounded"
+            >
+                Next Question
+            </div>
+        </>
     );
 }
