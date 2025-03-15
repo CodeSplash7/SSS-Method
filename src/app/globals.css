@@ -21,6 +21,7 @@ body {
 
 html {
   @apply w-full h-fit overflow-x-hidden;
+  scroll-behavior: smooth;
 }
 
 body {

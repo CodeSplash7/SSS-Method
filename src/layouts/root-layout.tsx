@@ -19,7 +19,7 @@ export default function RootLayout({
       signInForceRedirectUrl="/dashboard"
     >
       <html lang="en">
-        <body className="relative bg-[#1cbac875]">
+        <body className="relative bg-[#1cbac875] w-full h-full">
           {children}
           <AnimationElements />
         </body>
