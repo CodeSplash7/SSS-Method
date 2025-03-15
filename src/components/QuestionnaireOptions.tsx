@@ -10,16 +10,12 @@ import {
   handleSelectAnimation
 } from "@/animations/optionsAnimations";
 import {
-  hideNextQuestionButton,
-  showNextQuestionButton
-} from "@/animations/nextQuestionButtonAnimation";
-import {
     slideOut as slideOutForm,
     slideIn as slideInForm,
 } from "@/animations/formContentSlideAnimation";
 import delay from "@/general-utils/delay";
-import replaceCharAtIndex from "@/general-utils/replaceCharAtIndex";
 import Questionnaire from "@/general-utils/Questionnaire";
+import NextQuestionButton from "./NextQuestionButton";
 
 
 function useAnimations() {
@@ -30,7 +26,6 @@ function useAnimations() {
             current: number | null;
             previous: number | null;
         },
-        // hasChangedQuestion: boolean,
         inBetweenCallback?: () => void,
     ) {
         if (isAnimating) return;
@@ -77,7 +72,6 @@ function useQuestionnaireState() {
         previous: number | null;
     }>({
         current: Number(URL.queryParams.answers[questionIndex.current]),
-        // current: Questionnaire[questionIndex.current].options[],
         previous: null,
     });
 
@@ -129,6 +123,7 @@ export default function QuestionnaireOptions({
 
             if (hasChangedQuestion)
                 await slideOutForm(hasWentBack ? "right" : "left");
+
             setCurrentOptions(Questionnaire[questionIndex.current].options);
             setSelectedOption({
                 current: hasAnswered ? Number(chosenAnswer) : null,
@@ -143,17 +138,15 @@ export default function QuestionnaireOptions({
 
     // handle options click animations
     useEffect(() => {
-        runSelectAnimation(
-            selectedOption,
-            // questionIndex.current !== Number(URL.queryParams.questionIndex),
-        );
+        runSelectAnimation(selectedOption);
     }, [selectedOption]);
 
     return (
         <>
             <div
+                id="options"
                 style={{ opacity: `${Number(isSameRoute)}` }}
-                className="z-[10] flex flex-col justify-start gap-[8px] w-[95%] text-[0.9rem] mt-[40px] overflow-y-scroll"
+                className="z-[10] h-full flex flex-col justify-start gap-[8px] w-[95%] text-[0.9rem] mt-[40px] overflow-y-scroll"
             >
                 {currentOptions.map((option, index) => (
                     <QuestionnaireOption
