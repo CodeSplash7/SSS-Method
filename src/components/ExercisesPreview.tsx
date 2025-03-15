@@ -1,8 +1,8 @@
 "use client";
 
-import { animate } from "@/general-utils/app-routes";
 import { Montserrat } from "next/font/google";
-import { RefObject, useEffect, useRef, useState } from "react";
+import { useState } from "react";
+import Carousel from "./Carousel";
 
 const montserrat = Montserrat({
     subsets: ["latin"],
@@ -10,10 +10,8 @@ const montserrat = Montserrat({
     style: ["italic", "normal"],
 });
 // LEFT {{U N D O N E}}}:
-// currently it works -fine-, but not how i want it,
 // what i want to add:
-// - click a card => accordion with explanation (complex bc of the current code logic)
-// - smoother cards transition (doubling the cards at the extremities when changing offset to avoid instant card movements and create a nice animation)
+// clicking a card makes it do rotating animation, revelaing the information of the exercises on the back of the card
 
 export default function ExercisesPreview() {
     const [offset, setOffset] = useState(0);
