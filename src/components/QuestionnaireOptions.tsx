@@ -101,131 +101,89 @@ function useQuestionnaireState() {
     Questionnaire[Number(URL.queryParams.questionIndex)].options
   );
 
+  useEffect(() => {
+    if (questionIndex.current === Number(URL.queryParams.questionIndex)) return;
+    setQuestionIndex({
+      current: Number(URL.queryParams.questionIndex),
+      previous: questionIndex.current
     });
+  }, [URL.queryParams.questionIndex]);
 
-        if (questionIndex.current === Number(URL.queryParams.questionIndex))
-            return;
-        setQuestionIndex({
-            current: Number(URL.queryParams.questionIndex),
-            previous: questionIndex.current,
-        });
-    }, [URL.queryParams.questionIndex]);
-
-    return [
-        [selectedOption, setSelectedOption],
-        [currentOptions, setCurrentOptions],
-        questionIndex,
-    ] as const;
+  return [
+    [selectedOption, setSelectedOption],
+    [currentOptions, setCurrentOptions],
+    questionIndex
+  ] as const;
 }
 
 export default function QuestionnaireOptions({
-    isSameRoute,
+  isSameRoute
 }: {
-    isSameRoute: boolean;
+  isSameRoute: boolean;
 }) {
-    // hooks
-    const [URL] = useUrl();
-    const { runSelectAnimation, isAnimating } = useAnimations();
+  // hooks
+  const [URL] = useUrl();
+  const { runSelectAnimation, isAnimating } = useAnimations();
 
-    // state
-    const [
-        [selectedOption, setSelectedOption],
-        [currentOptions, setCurrentOptions],
-        questionIndex,
-    ] = useQuestionnaireState();
+  // state
+  const [
+    [selectedOption, setSelectedOption],
+    [currentOptions, setCurrentOptions],
+    questionIndex
+  ] = useQuestionnaireState();
 
-    useEffect(() => {
-        const chosenAnswer = URL.queryParams.answers[questionIndex.current];
+  useEffect(() => {
+    const chosenAnswer = URL.queryParams.answers[questionIndex.current];
+    const hasAnswered = !!chosenAnswer;
 
-        const hasAnswered = !!chosenAnswer;
+    (async () => {
+      const hasWentBack = questionIndex.current < questionIndex.previous;
+      const hasChangedQuestion =
+        questionIndex.current !== questionIndex.previous;
 
-        (async () => {
-            const hasWentBack = questionIndex.current < questionIndex.previous;
-            const hasChangedQuestion =
-                questionIndex.current !== questionIndex.previous;
+      if (hasChangedQuestion)
+        await slideOutForm(hasWentBack ? "right" : "left");
 
-            if (hasChangedQuestion)
-                await slideOutForm(hasWentBack ? "right" : "left");
+      setCurrentOptions(Questionnaire[questionIndex.current].options);
+      setSelectedOption({
+        current: hasAnswered ? Number(chosenAnswer) : null,
+        previous: selectedOption.current
+      });
 
-            setCurrentOptions(Questionnaire[questionIndex.current].options);
-            setSelectedOption({
-                current: hasAnswered ? Number(chosenAnswer) : null,
-                previous: selectedOption.current,
-            });
+      await delay(500);
 
-            await delay(500);
+      if (hasChangedQuestion) slideInForm(hasWentBack ? "left" : "right");
+    })();
+  }, [questionIndex]);
 
-            if (hasChangedQuestion) slideInForm(hasWentBack ? "left" : "right");
-        })();
-    }, [questionIndex]);
+  // handle options click animations
+  useEffect(() => {
+    runSelectAnimation(selectedOption);
+  }, [selectedOption]);
 
-    // handle options click animations
-    useEffect(() => {
-        runSelectAnimation(selectedOption);
-    }, [selectedOption]);
-
-    return (
-        <>
-            <div
-                id="options"
-                style={{ opacity: `${Number(isSameRoute)}` }}
-                className="z-[10] h-full flex flex-col justify-start gap-[8px] w-[95%] text-[0.9rem] mt-[40px] overflow-y-scroll"
-            >
-                {currentOptions.map((option, index) => (
-                    <QuestionnaireOption
-                        key={index}
-                        onSelect={async () => {
-                            if (isAnimating) return;
-                            setSelectedOption({
-                                current:
-                                    selectedOption.current === index
-                                        ? null
-                                        : index,
-                                previous: selectedOption.current,
-                            });
-                        }}
-                        option={option}
-                        optionIndex={index}
-                    />
-                ))}
-            </div>
-            <NextQuestionButton selectedOption={selectedOption} />
-        </>
-    );
-}
-
-function QuestionnaireOption({
-
-    onSelect,
-    option,
-    optionIndex,
-}: {
-    onSelect: () => Promise<void>;
-    option: QuestionOption;
-    optionIndex: number;
-}) {
-    return (
-        <div
-            id={`option${optionIndex}`}
-            onClick={async () => {
-                await onSelect();
+  return (
+    <>
+      <div
+        id="options"
+        style={{ opacity: `${Number(isSameRoute)}` }}
+        className="z-[10] h-full flex flex-col justify-start gap-[8px] w-[95%] text-[0.9rem] mt-[40px] overflow-y-scroll"
+      >
+        {currentOptions.map((option, index) => (
+          <QuestionnaireOption
+            key={index}
+            onSelect={async () => {
+              if (isAnimating) return;
+              setSelectedOption({
+                current: selectedOption.current === index ? null : index,
+                previous: selectedOption.current
+              });
             }}
-            data-index={String(optionIndex)}
-            className="option relative font-[400] overflow-hidden text-[#062f33] hover:bg-white bg-[#e9ecef] border border-[2px] transition duration-150 hover:border-[#1cbac8] border-transparent rounded-[6px] min-h-fit flex justify-between items-center px-[9px] py-[10px]"
-        >
-            <div className="option-response flex gap-[3px] relative left-0">
-                <div>{option.emoji}</div>
-                <div>{option.answer}</div>
-                <div className="hidden-emoji opacity-0 relative">
-                    {option.emoji}
-                </div>
-            </div>
-            <div
-                style={{ transform: "translateX(0%)" }}
-                className="option-detail relative text-[#6b6868]"
-            >
-                {option.detail}
-            </div>
-        </div>
-    );
+            option={option}
+            optionIndex={index}
+          />
+        ))}
+      </div>
+      <NextQuestionButton selectedOption={selectedOption} />
+    </>
+  );
 }
