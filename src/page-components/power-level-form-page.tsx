@@ -1,5 +1,5 @@
 import QuestionnaireOptions from "@/components/QuestionnaireOptions";
-import ScaleDownFormAnimation from "@/components/ScaleDownFormAnimation";
+import ScaleFormOnScrollAnimationHandler from "@/components/ScaleFormOnScrollAnimationHandler";
 import { Question } from "@/types/QuestionnaireTypes";
 import { cookies } from "next/headers";
 
@@ -17,7 +17,7 @@ export default async function PowerLevelFormPage({
 
     return (
         <div className="z-30 w-full h-screen flex flex-col justify-start items-center">
-            <ScaleDownFormAnimation />
+            <ScaleFormOnScrollAnimationHandler />
             <div
                 className="w-[412.5px] h-[225px] relative top-[10px] bg-[#111111] max-w-[90%] flex flex-col p-[12px] justify-between items-center rounded-[10.5px]"
                 style={{
